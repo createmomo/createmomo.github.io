@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CRF Layer on the Top of BiLSTM - 2 | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="ReviewIn the previous section, we know that the CRF layer can learn some constraints from the training dataset to ensure the final predicted entity label sequences are valid. The constrains could be:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CRF Layer on the Top of BiLSTM - 2">
+<meta property="og:url" content="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="ReviewIn the previous section, we know that the CRF layer can learn some constraints from the training dataset to ensure the final predicted entity label sequences are valid. The constrains could be:">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/CRF-LAYER-2-v2.png">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/qr_code.jpg">
+<meta property="og:updated_time" content="2020-04-03T23:04:50.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CRF Layer on the Top of BiLSTM - 2">
+<meta name="twitter:description" content="ReviewIn the previous section, we know that the CRF layer can learn some constraints from the training dataset to ensure the final predicted entity label sequences are valid. The constrains could be:">
+<meta name="twitter:image" content="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/CRF-LAYER-2-v2.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CRF_Layer_on_the_Top_of_BiLSTM_2" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/" class="article-date">
+  <time datetime="2017-09-23T10:06:38.000Z" itemprop="datePublished">2017-09-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CRF Layer on the Top of BiLSTM - 2
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Review"><a href="#Review" class="headerlink" title="Review"></a>Review</h2><p>In the <a href="https://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/">previous section</a>, we know that the CRF layer can learn some constraints from the training dataset to ensure the final predicted entity label sequences are valid.</p>
+<p>The constrains could be:</p>
+<ul>
+<li>The label of the first word in a sentence should start with “B-“ or “O”, not “I-“</li>
+<li>“B-label1 I-label2 I-label3 I-…”, in this pattern, label1, label2, label3 … should be the same named entity label. For example, “B-Person I-Person” is valid, but “B-Person I-Organization” is invalid.</li>
+<li>“O I-label” is invalid. The first label of one named entity should start with “B-“ not “I-“, in other words, the valid pattern should be “O B-label”</li>
+<li>…</li>
+</ul>
+<p>After you read this article, you will know why the CRF layer can learn those constrains.<br><a id="more"></a></p>
+<h2 id="2-CRF-Layer"><a href="#2-CRF-Layer" class="headerlink" title="2. CRF Layer"></a>2. CRF Layer</h2><p>In the loss function of CRF layer, we have two types of scores. These two scores are the <strong>key concepts</strong> of CRF layer.</p>
+<h3 id="2-1-Emission-score"><a href="#2-1-Emission-score" class="headerlink" title="2.1 Emission score"></a>2.1 Emission score</h3><p>The first one is the emission score. These emission scores come from the BiLSTM layer. As shown in figure 2.1, for example, the score of $ w_0 $ labeled as B-Person is 1.5.<br><img src="/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/CRF-LAYER-2-v2.png" alt="Figure 2.1: the emission scores come from the BiLSTM layer"></p>
+<p>For convenience, we will give each label a index number as shown in the table below.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Label</th>
+<th style="text-align:right">Index</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">B-Person</td>
+<td style="text-align:right">0</td>
+</tr>
+<tr>
+<td style="text-align:left">I-Person</td>
+<td style="text-align:right">1</td>
+</tr>
+<tr>
+<td style="text-align:left">B-Organization</td>
+<td style="text-align:right">2</td>
+</tr>
+<tr>
+<td style="text-align:left">I-Organization</td>
+<td style="text-align:right">3</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:right">4</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We use $ x_{iy_j} $ to represent the emission score. $ i $ is the index of word and $ y_j $ is the index of label. For instance, according the figure 2.1, $ x_{i=1,y_j=2} = x_{w_1,B-Organization} = 0.1$ which means the score of $ w_1 $ as B-Organization is 0.1.</p>
+<h3 id="2-2-Transition-score"><a href="#2-2-Transition-score" class="headerlink" title="2.2 Transition score"></a>2.2 Transition score</h3><p>We use $ t_{y_iy_j} $ to represent a transition score. For example, $ t_{B-Person, I-Person} = 0.9$ means the score of label transition $ B-Person \rightarrow I-Person$ is 0.9. Therefore, we have a transition score matrix which stores all the scores between all the labels.</p>
+<p>In order to make the transition score matrix more robust, we will add two more labels, START and END. START means the start of a sentence, NOT the first word. END means the end of sentence.</p>
+<p>Here is an example of the transition matrix score including the extra added START and END labels.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">START</th>
+<th style="text-align:left">B-Person</th>
+<th style="text-align:left">I-Person</th>
+<th style="text-align:left">B-Organization</th>
+<th style="text-align:left">I-Organization</th>
+<th style="text-align:left">O</th>
+<th style="text-align:left">END</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">START</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0.8</td>
+<td style="text-align:left">0.007</td>
+<td style="text-align:left">0.7</td>
+<td style="text-align:left">0.0008</td>
+<td style="text-align:left">0.9</td>
+<td style="text-align:left">0.08</td>
+</tr>
+<tr>
+<td style="text-align:left">B-Person</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0.6</td>
+<td style="text-align:left">0.9</td>
+<td style="text-align:left">0.2</td>
+<td style="text-align:left">0.0006</td>
+<td style="text-align:left">0.6</td>
+<td style="text-align:left">0.009</td>
+</tr>
+<tr>
+<td style="text-align:left">I-Person</td>
+<td style="text-align:left">-1</td>
+<td style="text-align:left">0.5</td>
+<td style="text-align:left">0.53</td>
+<td style="text-align:left">0.55</td>
+<td style="text-align:left">0.0003</td>
+<td style="text-align:left">0.85</td>
+<td style="text-align:left">0.008</td>
+</tr>
+<tr>
+<td style="text-align:left">B-Organization</td>
+<td style="text-align:left">0.9</td>
+<td style="text-align:left">0.5</td>
+<td style="text-align:left">0.0003</td>
+<td style="text-align:left">0.25</td>
+<td style="text-align:left">0.8</td>
+<td style="text-align:left">0.77</td>
+<td style="text-align:left">0.006</td>
+</tr>
+<tr>
+<td style="text-align:left">I-Organization</td>
+<td style="text-align:left">-0.9</td>
+<td style="text-align:left">0.45</td>
+<td style="text-align:left">0.007</td>
+<td style="text-align:left">0.7</td>
+<td style="text-align:left">0.65</td>
+<td style="text-align:left">0.76</td>
+<td style="text-align:left">0.2</td>
+</tr>
+<tr>
+<td style="text-align:left">O</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0.65</td>
+<td style="text-align:left">0.0007</td>
+<td style="text-align:left">0.7</td>
+<td style="text-align:left">0.0008</td>
+<td style="text-align:left">0.9</td>
+<td style="text-align:left">0.08</td>
+</tr>
+<tr>
+<td style="text-align:left">END</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+<td style="text-align:left">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As shown in the table above, we can find that the transition matrix has learned some useful constrains.</p>
+<ul>
+<li>The label of the first word in a sentence should start with “B-“ or “O”, not “I-“ <strong>(The transtion scores from “START” to “I-Person or I-Organization” are very low.)</strong></li>
+<li>“B-label1 I-label2 I-label3 I-…”, in this pattern, label1, label2, label3 … should be the same named entity label. For example, “B-Person I-Person” is valid, but “B-Person I-Organization” is invalid. <strong>(For example, the score from “B-Organization” to “I-Person” is only 0.0003 which is much lower than the others.)</strong></li>
+<li>“O I-label” is invalid. The first label of one named entity should start with “B-“ not “I-“, in other words, the valid pattern should be “O B-label” <strong>(Again, for instance, the score $t_{O,I-Person}$ is very small.)</strong></li>
+<li>…</li>
+</ul>
+<p>You may want to ask a question about the matrix. <strong>Where or how to get the transition matrix?</strong></p>
+<p>Actually, the matrix is a paramer of a BiLSTM-CRF model. Before you train the model, you could initialize all the transition scores in the matrix randomly. All the random scores will be updated automatically during your training process. In other words, the CRF layer can learn those constraints by itself. We do not need to build the matrix manually. The scores will be more and more reasonable gradually with increasing training iterations.</p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><h4 id="2-3-CRF-loss-function"><a href="#2-3-CRF-loss-function" class="headerlink" title="2.3 CRF loss function"></a>2.3 CRF loss function</h4><p>Introduction of CRF loss function which is consist of the real path score and the total score of all the possible paths.</p>
+<h4 id="2-4-Real-path-score"><a href="#2-4-Real-path-score" class="headerlink" title="2.4 Real path score"></a>2.4 Real path score</h4><p>How to calculate the score of the true labels of a sentence.</p>
+<h4 id="2-5-The-score-of-all-the-possible-paths"><a href="#2-5-The-score-of-all-the-possible-paths" class="headerlink" title="2.5 The score of all the possible paths"></a>2.5 The score of all the possible paths</h4><p>How to calculate the total score of all the possible paths of a sentence with a step-by-step toy example.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1]  Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K. and Dyer, C., 2016. Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360.<br><a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">https://arxiv.org/abs/1603.01360</a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please subscribe to the public account by your Wechat! (2020-04-03)<br><img src="/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/qr_code.jpg" alt="QR Code"></p>
+<blockquote>
+<p>When you reprint or distribute this article, please include the original link address.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/" data-id="cm7elzvmp0009mgtj9jhhe7mp" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/10/08/CRF-Layer-on-the-Top-of-BiLSTM-3/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CRF Layer on the Top of BiLSTM - 3
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CRF Layer on the Top of BiLSTM - 1</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

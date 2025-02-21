@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CRF Layer on the Top of BiLSTM - 7 | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="3 Chainer ImplementationIn this section, the structure of code will be explained. In addition, an important tip of implementing the CRF loss layer will also be given. Finally, the Chainer (version 2.0">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CRF Layer on the Top of BiLSTM - 7">
+<meta property="og:url" content="http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="3 Chainer ImplementationIn this section, the structure of code will be explained. In addition, an important tip of implementing the CRF loss layer will also be given. Finally, the Chainer (version 2.0">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/qr_code.jpg">
+<meta property="og:updated_time" content="2020-04-03T23:04:14.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CRF Layer on the Top of BiLSTM - 7">
+<meta name="twitter:description" content="3 Chainer ImplementationIn this section, the structure of code will be explained. In addition, an important tip of implementing the CRF loss layer will also be given. Finally, the Chainer (version 2.0">
+<meta name="twitter:image" content="http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/qr_code.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CRF-Layer-on-the-Top-of-BiLSTM-7" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/" class="article-date">
+  <time datetime="2017-12-06T14:23:20.000Z" itemprop="datePublished">2017-12-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CRF Layer on the Top of BiLSTM - 7
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="3-Chainer-Implementation"><a href="#3-Chainer-Implementation" class="headerlink" title="3 Chainer Implementation"></a>3 Chainer Implementation</h4><p>In this section, the structure of code will be explained. In addition, an important tip of implementing the CRF loss layer will also be given. Finally, the Chainer (version 2.0) implementation source code will be released in the next article.<br><a id="more"></a></p>
+<h4 id="3-1-Overall-Structure"><a href="#3-1-Overall-Structure" class="headerlink" title="3.1 Overall Structure"></a>3.1 Overall Structure</h4><p>As you can see, the code mainly includes three parts: Initialization, Loss Computation and Prediction labels for a sentence. (The full code will be released in the next article)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">My_CRF</span><span class="params">()</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">()</span>:</span></div><div class="line">		<span class="comment">#[Initialization]</span></div><div class="line">		<span class="string">'''</span></div><div class="line"><span class="string">		Randomly initialize transition scores</span></div><div class="line"><span class="string">	    '''</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(training_data_set)</span>:</span></div><div class="line">		<span class="comment">#[Loss Function]</span></div><div class="line">		Total Cost = <span class="number">0.0</span></div><div class="line">		</div><div class="line">		<span class="comment">#Compute CRF Loss</span></div><div class="line">		<span class="string">'''</span></div><div class="line"><span class="string">		for sentence in training_data_set:</span></div><div class="line"><span class="string">			1) The real path score of current sentence according the true labels</span></div><div class="line"><span class="string">			2) The log total score of all the possbile paths of current sentence</span></div><div class="line"><span class="string">			3) Compute the cost on this sentence using the results from 1) and 2)</span></div><div class="line"><span class="string">			4) Total Cost += Cost of this sentence</span></div><div class="line"><span class="string">		'''</span></div><div class="line">		<span class="keyword">return</span> Total Cost</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">argmax</span><span class="params">(new sentences)</span>:</span></div><div class="line">		<span class="comment">#[Prediction]</span></div><div class="line">		<span class="string">'''</span></div><div class="line"><span class="string">		Predict labels for new sentences</span></div><div class="line"><span class="string">        '''</span></div></pre></td></tr></table></figure></p>
+<h4 id="3-2-Add-Two-Extra-Labels-START-and-END"><a href="#3-2-Add-Two-Extra-Labels-START-and-END" class="headerlink" title="3.2 Add Two Extra Labels (START and END)"></a>3.2 Add Two Extra Labels (START and END)</h4><p>As described in <a href="https://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/">2.2</a>, in the transition score matrix we added two START and END labels. This will affect the initialization of transition score matrix and the values of emission score matrix when we compute the loss of one certain sentence.</p>
+<p><strong>[Example]</strong><br>Let’s say in our dataset, we only have one type of named entity, PERSON and so we actually have three labels (not including START and END): B-PERSON, I-PERSON and O.</p>
+<p><strong>Transition Score Matrix</strong><br>After adding the two extra labels(START and END), when we initialize the transition score in the init function, we do like this:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">n_label = <span class="number">3</span> <span class="comment">#B-PERSON, I-PERSON AND O</span></div><div class="line">transitions = np.array(value, dtype=np.float32)</div></pre></td></tr></table></figure>
+<p>The shape of “value” is (n_label + 2, n_label + 2). 2 is the number of START and END. In addition, the values of “value” are generated randomly.</p>
+<p><strong>Emission Score Matrix</strong><br>You should know that, the output of BiLSTM layer is the emission score for a sentence as described in <a href="https://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/">2.1</a>. For example, our sentence have 3 words and the output of BiLSTM should be looked like this:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Word\Label</th>
+<th>B-Person</th>
+<th>I-Person</th>
+<th>O</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>w0</td>
+<td>0.1</td>
+<td>0.2</td>
+<td>0.65</td>
+</tr>
+<tr>
+<td>w1</td>
+<td>0.33</td>
+<td>0.18</td>
+<td>0.99</td>
+</tr>
+<tr>
+<td>w2</td>
+<td>0.87</td>
+<td>0.66</td>
+<td>0.53</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>After we add the extra START and END label, the emission score matrix would be:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Word\Label</th>
+<th>B-Person</th>
+<th>I-Person</th>
+<th>O</th>
+<th>START</th>
+<th>END</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>start</td>
+<td>-1000</td>
+<td>-1000</td>
+<td>-1000</td>
+<td>0</td>
+<td>-1000</td>
+</tr>
+<tr>
+<td>w0</td>
+<td>0.1</td>
+<td>0.2</td>
+<td>0.65</td>
+<td>-1000</td>
+<td>-1000</td>
+</tr>
+<tr>
+<td>w1</td>
+<td>0.33</td>
+<td>0.18</td>
+<td>0.99</td>
+<td>-1000</td>
+<td>-1000</td>
+</tr>
+<tr>
+<td>w2</td>
+<td>0.87</td>
+<td>0.66</td>
+<td>0.53</td>
+<td>-1000</td>
+<td>-1000</td>
+</tr>
+<tr>
+<td>end</td>
+<td>-1000</td>
+<td>-1000</td>
+<td>-1000</td>
+<td>-1000</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>As shown in the table above, we expanded the emission score matrix by adding two words(start and end) and their corresponing labels(START and END). The outputs of BiLSTM layer do not include the emission scores of the new added words, but we can specify these scores manually (i.e. $x_{start,START}=0$ and $x_{start, the Other Labels}=-1000$). The emission score of the other labels on word “start” should be a small value (e.g. -1000). If you would like to set another small value, it is totally fine and it will not affect the performance of our model.</p>
+<h4 id="3-3-Updated-Overall-Structure"><a href="#3-3-Updated-Overall-Structure" class="headerlink" title="3.3 Updated Overall Structure"></a>3.3 Updated Overall Structure</h4><p>Based on the explanation above, here is a more detailed pseudo-code:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">My_CRF</span><span class="params">()</span>:</span></div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(n_label)</span>:</span></div><div class="line">		<span class="comment">#[Initialization]</span></div><div class="line">		<span class="string">'''</span></div><div class="line"><span class="string">		1) Randomly initialize transition score matrix. </span></div><div class="line"><span class="string">        The shape of this matrix is (n_label+2, n_label+2). </span></div><div class="line"><span class="string">        n_labels is the number of named entity classes in our dataset (e.g. B-Person, I-Person, O). </span></div><div class="line"><span class="string">        2 is the number of our added labels (i.e. START and END).</span></div><div class="line"><span class="string">		2) Moreover, we also set the small value as -1000 here.</span></div><div class="line"><span class="string">		'''</span></div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">__call__</span><span class="params">(training_data_set)</span>:</span></div><div class="line">		<span class="comment">#[Loss Function]</span></div><div class="line">		Total Cost = <span class="number">0.0</span></div><div class="line">		</div><div class="line">		<span class="comment">#Compute CRF Loss</span></div><div class="line">		<span class="keyword">for</span> sentence <span class="keyword">in</span> training_data_set:</div><div class="line">		    <span class="string">'''</span></div><div class="line"><span class="string">		    1) Extend the emission score matrix by adding words(start and end)</span></div><div class="line"><span class="string">            and adding labels(START and END) </span></div><div class="line"><span class="string">		    2) Compute the real path score of current sentence according the </span></div><div class="line"><span class="string">            true labels (section 2.4)</span></div><div class="line"><span class="string">		    3) Compute the log total score of all the possbile paths of current </span></div><div class="line"><span class="string">            sentence (section 2.5)</span></div><div class="line"><span class="string">		    4) Compute the cost on this sentence using the results from 2) </span></div><div class="line"><span class="string">            and 3) that is -(real_path_score - all_path_score). (section 2.5)</span></div><div class="line"><span class="string">		    5) Total Cost += the cost of current sentence</span></div><div class="line"><span class="string">		    '''</span></div><div class="line">		<span class="keyword">return</span> Total Cost</div><div class="line">	</div><div class="line">	<span class="function"><span class="keyword">def</span> <span class="title">argmax</span><span class="params">(new sentences)</span>:</span></div><div class="line">		<span class="comment">#[Prediction]</span></div><div class="line">		<span class="keyword">for</span> sentence <span class="keyword">in</span> new_sentences:</div><div class="line">		    <span class="string">'''</span></div><div class="line"><span class="string">		    1) Extend the emission score matrix by adding words(start and end) </span></div><div class="line"><span class="string">            and adding labels(START and END)</span></div><div class="line"><span class="string">		    2) Predict the labels for the current new sentence (section 2.6)</span></div><div class="line"><span class="string">		    '''</span></div></pre></td></tr></table></figure></p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><p>The next article would be the final one. In the next section, the CRF layer implemented by using Chainer 2.0 will be released with detailed comments. What is more, it will also be published on GitHub.</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1]  Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K. and Dyer, C., 2016. Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360.<br><a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">https://arxiv.org/abs/1603.01360</a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please subscribe to the public account by your Wechat! (2020-04-03)<br><img src="/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/qr_code.jpg" alt="QR Code"></p>
+<blockquote>
+<p>When you reprint or distribute this article, please include the original link address.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/" data-id="cm7elzvmm0007mgtj1rt1329g" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/12/07/CRF-Layer-on-the-Top-of-BiLSTM-8/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CRF Layer on the Top of BiLSTM - 8
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CRF Layer on the Top of BiLSTM - 6</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

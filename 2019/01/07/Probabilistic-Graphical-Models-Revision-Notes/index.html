@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Probabilistic Graphical Models Revision Notes | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="[Last Updated: 2020.02.23]This note summarises the online course, Probabilistic Graphical Models Specialization on Coursera.Any comments and suggestions are most welcome!">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Probabilistic Graphical Models Revision Notes">
+<meta property="og:url" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="[Last Updated: 2020.02.23]This note summarises the online course, Probabilistic Graphical Models Specialization on Coursera.Any comments and suggestions are most welcome!">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/1.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/2.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/3.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/4.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/5.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/6.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/7.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/8.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/9.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/10.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/11.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/12.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/13.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/14.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/15.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/16.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/17.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/18.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/19.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/20.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/21.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/22.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/23.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/24.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/25.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/26.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/27.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/28.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/29.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/30.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/31.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/32.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/33.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/34.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/35.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/36.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/37.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/38.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/39.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/40.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/41.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/42.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/43.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/44.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/45.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/46.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/47.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/48.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/49.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/50.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/51.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/52.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/53.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/54.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/55.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/56.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/57.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/58.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/52.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/59.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/60.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/61.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/62.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/63.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/64.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/65.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/66.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/67.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/68.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/69.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/70.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/71.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/72.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/73.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/74.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/75.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/76.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/77.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/78.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/79.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/80.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/81.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/82.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/84.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/83.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/85.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/86.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/87.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/88.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/89.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/90.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/91.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/92.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/92.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/93.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/94.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/95.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/96.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/97.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/98.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/99.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/100.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/101.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/102.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/103.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/104.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/105.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/106.png">
+<meta property="og:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/107.png">
+<meta property="og:updated_time" content="2020-02-24T00:17:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Probabilistic Graphical Models Revision Notes">
+<meta name="twitter:description" content="[Last Updated: 2020.02.23]This note summarises the online course, Probabilistic Graphical Models Specialization on Coursera.Any comments and suggestions are most welcome!">
+<meta name="twitter:image" content="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/1.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Probabilistic-Graphical-Models-Revision-Notes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/" class="article-date">
+  <time datetime="2019-01-06T16:00:00.000Z" itemprop="datePublished">2019-01-07</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Probabilistic Graphical Models Revision Notes
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Last-Updated-2020-02-23"><a href="#Last-Updated-2020-02-23" class="headerlink" title="[Last Updated: 2020.02.23]"></a>[Last Updated: 2020.02.23]</h3><p>This note summarises the online course, <a href="https://www.coursera.org/specializations/probabilistic-graphical-models" target="_blank" rel="external">Probabilistic Graphical Models Specialization</a> on Coursera.<br><strong><strong>Any comments and suggestions are most welcome!</strong></strong><br><a id="more"></a></p>
+<hr>
+<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a><a name="tableofcontents"></a>Table of Contents</h2><ul>
+<li><strong><a href="#representations">Representations</a></strong><ul>
+<li><strong><a href="#bayesian_network">Bayesian Network (directed graph)</a></strong><ul>
+<li><a href="#defination">Defination</a></li>
+<li><a href="#reasoning_patterns_in_bayesian_network">Reasoning Patterns in Bayesian Network</a></li>
+<li><a href="#flow_of_probabilistic_influence">Flow of Probabilistic Influence (active trial)</a></li>
+<li><a href="#independencies">Independencies</a></li>
+<li><a href="#d_seperation">d-seperation</a></li>
+<li><a href="#i_maps">I-Maps (Indenpendency Map)</a></li>
+<li><a href="#factorisation_and_i_maps">Factorisation and I-Maps</a></li>
+<li><a href="#naive_bayes">Naive Bayes</a></li>
+<li><a href="#template_models">Template Models</a><ul>
+<li><a href="#temporal_models">Temporal Models (involve over time)</a></li>
+<li><a href="#2tbn">2 Time-Slice Bayesian Network (2TBN)</a></li>
+<li><a href="#plate_models">Plate Models</a></li>
+</ul>
+</li>
+<li><a href="#conditional_probability_distribution">Conditional Probability Distribution (CPD)</a><ul>
+<li><a href="#general_cpd">General CPD</a></li>
+<li><a href="#table_based_cpd">Table-based CPD</a></li>
+<li><a href="#context_specific_independence">Context-specific Independence</a></li>
+<li><a href="#tree_structured_cpd">Tree-Structured CPD</a></li>
+<li><a href="#multiplexer_cpd">Multiplexer CPD</a></li>
+<li><a href="#noise_or_cpd">Noise OR CPD</a></li>
+<li><a href="#sigmoid_cpd">Sigmoid CPD</a></li>
+<li><a href="#continuous_variables">Continuous Variables</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><a href="#markov_network">Markov Network (undirected graph)</a></strong><ul>
+<li><a href="#markov_network_fundamentals">Markov Network Fundamentals</a><ul>
+<li><a href="#pairwise_markov_networks">Pairwise Markov Networks</a></li>
+<li><a href="#general_gibbs_distribution">General Gibbs Distribution (a more general expression)</a></li>
+<li><a href="#induced_markov_network">Induced Markov Network (connects every pair of nodes that are in the same factor)</a></li>
+<li><a href="#factorization">Factorization</a></li>
+<li><a href="#conditional_random_fields">Conditional Random Fields</a></li>
+<li><a href="#independencies_in_markov_networks">Independencies in Markov Networks</a></li>
+</ul>
+</li>
+<li><a href="#local_structure_in_markov_networks">Local Structure in Markov Networks</a><ul>
+<li><a href="#log_linear_models">Log-linear Models (CRF, Ising Model, Metric MRFs)</a></li>
+</ul>
+</li>
+<li><a href="#decision_making">Decision Making</a><ul>
+<li><a href="#maxium_expected_utility">Maximum Expected Utility</a></li>
+<li><a href="#utility_functions">Utility Functions</a></li>
+<li><a href="#value_of_perfect_information">Value of Perfect Information</a></li>
+</ul>
+</li>
+<li><a href="#knowledge_engineering">Knowledge Engineering</a><ul>
+<li><a href="#generative_vs_descriminative">Generative vs. Discriminative</a></li>
+<li><a href="#designing_a_graphical_model">Designing a graphical model (variable types)</a></li>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#parameters_local_structure">Parameters: Local Structure</a></li>
+<li><a href="#iterative_refinement">Iterative Refinement</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><a href="#inference">Inference</a></strong><ul>
+<li><strong><a href="#conditional_probability_queries">Conditional Probability Queries (Overview)</a></strong><ul>
+<li><a href="#sum_product_in_bayes_network_and_markov_network">Sum-Product in Bayes Network and Markov Network</a></li>
+<li><a href="#evidence">Evidence: Reduced Factors</a></li>
+<li><a href="#summary_of_sum_product_algorithm">Summary of Sum-Product Algorithm</a></li>
+</ul>
+</li>
+<li><strong><a href="#maximum_a_posterior">MAP (Maximum A Posterior) Inference (Overview)</a></strong><ul>
+<li><a href="#max_product">Max-Product</a></li>
+</ul>
+</li>
+<li><strong><a href="#variable_elimination">Variable Elimination (Computing Conditional Probabilities, Exact Inference)</a></strong><ul>
+<li><a href="#variable_elimination_algorithm">Variable Elimination Algorithm</a><ul>
+<li><a href="#elimination_in_chains">Elimination in Chains</a></li>
+<li><a href="#elimination_in_complicated_bn">Elimination in a more complicated BN</a></li>
+<li><a href="#variable_elimination_with_evidence">Variable Elimination with Evidence</a></li>
+<li><a href="#variable_elimination_in_mns">Variable Elimination in MNs</a></li>
+<li><a href="#summary_variable_elimination_algorithm">Summary Variable Elimination Algorithm</a></li>
+</ul>
+</li>
+<li><a href="#complexity_of_variable_elimination">Complexity of Variable Elimination</a></li>
+<li><a href="#graph_based_perspective_on_variable_elimination">Graph-based Perspective on Variable Elimination</a></li>
+<li><a href="#finding_elimination_ordering">Finding Elimination Orderings</a></li>
+<li><a href="#variable_elimination_summary">Variable Elimination (Summary)</a></li>
+</ul>
+</li>
+<li><strong><a href="#belief_propagation_algorithms">Belief Propagation Algorithms (Computing Conditional Probabilities, Exact Inference)</a></strong><ul>
+<li><a href="#message_passing_in_cluster_graphs">Message Passing in Cluster Graphs</a><ul>
+<li><a href="#belief_propagation_algorithms_2">Belief Propagation Algorithm</a></li>
+<li><a href="#properties_of_cluster_graphs">Properties of Cluster Graphs</a></li>
+<li><a href="#properties_of_belife_propagation">Properties of Belief Propagation</a></li>
+</ul>
+</li>
+<li><a href="#clique_trees">Clique Trees (faster and exact answer of inference)</a><ul>
+<li><a href="#message_passing_in_trees">Message Passing in Trees</a></li>
+<li><a href="#message_passing_in_trees_computation">Computation</a></li>
+<li><a href="#clique_tree_and_independence">Clique Tree and Independence</a></li>
+<li><a href="#clique_tree_and_variable_elimination">Clique Tree and Variable Elimination</a></li>
+</ul>
+</li>
+<li><a href="#loopy_belief_propagation">Loopy Belief Propagation</a><ul>
+<li><a href="#belief_propagation_in_practice">Belief Propagation In Practice</a></li>
+<li><a href="#loopy_belief_propagation_and_message_decoding">Loopy Belief Propagation and Message Decoding</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><a href="#map_algorithms">MAP Algorithms (Finding The Most Likely Assignment)</a></strong><ul>
+<li><a href="#map_message_passing">MAP Message Passing</a><ul>
+<li><a href="#max_sum_message_passing">Max Sum Message Passing</a></li>
+<li><a href="#finding_a_map_assignment">Finding a MAP Assignment</a></li>
+</ul>
+</li>
+<li><a href="#other_map_algorithms">Other MAP Algorithms</a><ul>
+<li><a href="#tractable_map_problems">Tractable MAP Problems</a></li>
+<li><a href="#dual_decomposition_intuition">Dual Decomposition - Intuition</a></li>
+<li><a href="#dual_decomposition_algorithm">Dual Decomposition - Algorithm</a>  </li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong><a href="#sampling_methods">Sampling Methods (Using Random Sampling to Provide Approximate Conditional Probability)</a></strong><ul>
+<li><a href="#simple_sampling">Simple Sampling</a></li>
+<li><a href="#markov_chain_monte_carlo">Markov Chain Monte Carlo</a></li>
+<li><a href="#using_a_markov_chain">Using a Markov Chain</a></li>
+<li><a href="#gibbs_sampling">Gibbs Sampling</a></li>
+<li><a href="#metropolis_hastings_algorithm">Metropolis Hastings Algorithm</a>  </li>
+</ul>
+</li>
+<li><strong><a href="#inference_in_temporal_models">Inference in Temporal Models</a></strong></li>
+<li><strong><a href="#inference_summary">Summary</a></strong></li>
+</ul>
+</li>
+<li><strong><a href="#learning">Learning</a></strong><ul>
+<li><strong><a href="#learning_overview">Overview</a></strong></li>
+<li><strong><a href="#parameter_estimated_in_bayesian_networks">Parameter Estimation in Bayesian Networks</a></strong><ul>
+<li><a href="#maximum_likelihood_parameter_estimation_in_bns">Maximum Likelihood Parameter Estimation in BNs</a></li>
+<li><a href="#bayesian_parameter_estimation_for_bns">Bayesian Parameter Estimation for BNs (Estimation and Prediction)</a></li>
+</ul>
+</li>
+<li><strong><a href="#learning_undirected_models">Learning Undirected Models (Parameter Estimation in MNs)</a></strong><ul>
+<li><a href="#maximum_likelihood_for_log_linear_models">Maximum Likelihood for Log-Linear Models</a></li>
+<li><a href="#maximum_likelihood_for_conditional_random_fields">Maximum Likelihood for Conditional Random Fields</a></li>
+<li><a href="#map_estimation_for_mrfs_and_crfs">MAP Estimation for MRFs and CRFs</a></li>
+</ul>
+</li>
+<li><strong><a href="#learning_bn_structure">Learning BN Structure</a></strong><ul>
+<li><a href="#structure_learning_overview_and_scoring_functions">Structure Learning: Overview and Scoring Functions</a></li>
+<li><a href="#searching_over_structures">Searching Over Structures</a></li>
+</ul>
+</li>
+<li><strong><a href="#learning_bns_with_incomplete_data">Learning BNs with Incomplete Data</a></strong><ul>
+<li><a href="#learning_bns_with_incomplete_data_overview">Overview</a></li>
+<li><a href="#expectation_maximisation_introduction">Expectation Maximisation - Introduction</a></li>
+<li><a href="#analysis_of_em_algorithm">Analysis of EM Algorithm</a></li>
+<li><a href="#em_in_practice">EM in Practice</a></li>
+<li><a href="#latent_variables">Latent Variables</a></li>
+</ul>
+</li>
+<li><strong><a href="#learning_summary">Summary</a></strong></li>
+</ul>
+</li>
+<li><strong><a href="#final_summary">Summary</a></strong></li>
+</ul>
+<p><strong><a href="#tableofcontents">Back to Table of Contents</a></strong></p>
+<hr>
+<h3 id="Representations"><a href="#Representations" class="headerlink" title=" Representations"></a><a name="representations"></a> Representations</h3><h4 id="Bayesian-Network-directed-graph"><a href="#Bayesian-Network-directed-graph" class="headerlink" title=" Bayesian Network (directed graph)"></a><a name="bayesian_network"></a> Bayesian Network (directed graph)</h4><h5 id="Defination"><a href="#Defination" class="headerlink" title=" Defination"></a><a name="defination"></a> Defination</h5><p>A directed acyclic graph (DAG) whose nodes represents the random variables, $X_1$, $X_2$, … $X_n$; For each node, $X_i$, we have a conditional probability distribution (CPD): $p(x_i|Par_G(Xi))$.</p>
+<p>$Par_{G(Xi)}$ is the parents of $X_i$.</p>
+<p>The bayesian network represents a joint distribution via the chain rule:<br>$p(X_1, X_2, …, X_n) = \prod_i p(X_i | Par_G(X_i))$</p>
+<p><em>Example:</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/1.jpg" alt="Example"><br>$p(D,I,G,S,L)=p(D)P(I)P(G|I,D)P(S|I)P(L|G)$<br>It is a legal distribution: $p \ge 0$ and $\sum_{D,I,G,S,L}p(D,I,G,S,L)=1$</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Reasoning-Patterns-in-Bayesian-Network"><a href="#Reasoning-Patterns-in-Bayesian-Network" class="headerlink" title=" Reasoning Patterns in Bayesian Network"></a><a name="reasoning_patterns_in_bayesian_network"></a> Reasoning Patterns in Bayesian Network</h5><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/2.jpg" alt="Example"><br><em>Causal Reasoning (top to bottom)</em><br>$p(l^1) \approx 0.5$, the probability of getting the reference letter(l=1)  for a student when we don’t know any information about him, is 0.5.<br>$p(l^1 \mid i^0) \approx 0.39$, if we know the student’s intelligence is not excellent (i=0), the probablility of getting the reference letter (l=1) is lower than that of when we don’t know his intelligence level.</p>
+<p><em>Evidence Reasoning (bottom to top)</em><br>Given the student’s grade of a course, that is grade C (g=3) which is not a good performance, we can infer the probability of, the course is a difficult one (d=1) and the student has high-level intelligence (i=1)  as follows:<br>$p(d^1\mid g^3) \approx 0.63$<br>$p(i^1\mid g^3) \approx 0.08$</p>
+<p><em>Intercausal Reasoning (intercausal reasoning between causes)</em><br>$p(i^1 \mid g^3, d^1) \approx 0.11$, given the student get grade C and the course is hard. Here is another example which is also the example for the case of “<strong>explaining away</strong>“:<br>$p(i^1) \approx 0.3$, if we don’t know any information about the student;<br>$p(i^1 \mid g^2) \approx 0.175$, given the student got grade B;<br>$p(i^1 \mid g^2,d^1) \approx 0.34$, given the student got grade B for this course and the course is hard.</p>
+<p>We can see that: the variables D and I become conditionally dependent given their commen child G is observed, even if they are marginally independent, i.e. $p(D,I)=p(D)p(I)$ (when the commen child G is not observed).</p>
+<p><em>Longer Path of Graph</em><br>We can also have longer reasoning on a graph:<br>Example1<br>$p(d^1)=0.4$<br>$p(d^1 \mid g^3) \approx 0.63$<br>$p(d^1 \mid g^3,s^1)\approx0.76$, $s^1$ is the student got a high SAT score.</p>
+<p>Exmaple2<br>$p(i^1)=0.3$<br>$p(i^1\mid g^3)\approx0.08$<br>$p(i^1\mid g^3,s^1)\approx0.58$</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Flow-of-Probabilistic-Influence-Active-Trial"><a href="#Flow-of-Probabilistic-Influence-Active-Trial" class="headerlink" title=" Flow of Probabilistic Influence (Active Trial)"></a><a name="flow_of_probabilistic_influence"></a> Flow of Probabilistic Influence (Active Trial)</h5><p><em>When can X influence Y (condition on X can change the beliefs\probablities of Y)?</em></p>
+<p>X <strong>CAN</strong> influence Y:<br>$X\rightarrow Y$,<br>$X\leftarrow Y$<br>$X\rightarrow W \rightarrow Y$<br>$X\leftarrow W \leftarrow Y$<br>$X\leftarrow W \rightarrow Y$</p>
+<p>X <strong>CANNOT</strong> influence Y:<br>$X\rightarrow W \leftarrow Y$ (V Structure)</p>
+<p><em>Active Trails</em><br>A trial $X_1-X_2-…-X_n$ is active if it has no V-structures ($X_{i-1}\rightarrow X_i \leftarrow X_{i+1}$).</p>
+<p><strong>When can X infludence Y given evidence about Z which is observed?</strong></p>
+<p>X <strong>CAN</strong> influence Y:<br>$X\rightarrow Y$<br>$X\leftarrow Y$<br>$X\rightarrow W \rightarrow Y$ ($W\not\in Z$, i.e. $W$ is not observed)<br>$X\leftarrow W \leftarrow Y$  ($W\not\in Z$, i.e. $W$ is not observed)<br>$X\leftarrow W \rightarrow Y$  ($W\not\in Z$, i.e. $W$ is not observed)<br>$X\rightarrow W \leftarrow Y$  ($W\in Z$, i.e. $W$ is observed), either if $W$ or one of its descendants is in $Z$.</p>
+<p>X <strong>CANNOT</strong> influence Y:<br>$X\rightarrow W \rightarrow Y$ ($W\in Z$, i.e. $W$ is observed)<br>$X\leftarrow W \leftarrow Y$  ($W\in Z$, i.e. $W$ is observed)<br>$X\leftarrow W \rightarrow Y$  ($W\in Z$, i.e. $W$ is observed)<br>$X\rightarrow W \leftarrow Y$  ($W\not\in Z$, i.e. $W$ is not observed), if $W$ and all its descendants are not observed.</p>
+<p><em>Active Trails</em><br>A trial $X_1-X_2-…-X_n$ is active given $Z$ if:</p>
+<ul>
+<li>for any V-structure ($X_{i-1}\rightarrow X_i \leftarrow X_{i+1}$), we have that $X_i$ or one of its descendants $\in Z$</li>
+<li>no other $X_i$ is in $Z$ (i.e. $X_i$ is not in V-structure).<br><strong><a href="#tableofcontents">Back to Table of Contents</a></strong></li>
+</ul>
+<h5 id="Independencies"><a href="#Independencies" class="headerlink" title=" Independencies"></a><a name="independencies"></a> Independencies</h5><ul>
+<li>For events $\alpha$ and $\beta$,  $p \models \alpha \perp \beta$ ($\models$: satisfied; $\perp$: independent) if:<ul>
+<li>$p(\alpha, \beta)=p(\alpha)p(\beta)$</li>
+<li>$p(\alpha \mid \beta)=p(\alpha)$</li>
+<li>$p(\beta \mid \alpha)=p(\beta)$</li>
+</ul>
+</li>
+<li>For random variables X and Y, $p \models X\perp Y$ if:<ul>
+<li>$p(X, Y)=p(X)p(Y)$</li>
+<li>$p(X \mid Y)=p(X)$</li>
+<li>$p(Y \mid X)=p(Y)$</li>
+</ul>
+</li>
+</ul>
+<p><em>Conditional Independencies</em></p>
+<ul>
+<li>For random variables X, Y, Z, $p \models (X \perp Y \mid Z)$ ($P(X,Y,Z)\propto \phi_1(X,Z)\phi_2(Y,Z)$) if:<ul>
+<li>$p(X, Y \mid Z)=p(X\mid Z)p(Y\mid Z)$</li>
+<li>$p(X \mid Y, Z)=p(X\mid Z)$</li>
+<li>$p(Y \mid X, Z)=p(Y\mid Z)$</li>
+</ul>
+</li>
+</ul>
+<p><em>Example</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/3.jpg" alt="Example"><br>$p \nvDash X_1 \perp X_2$<br>But, $p \models (X_1 \perp X_2 \mid Coin)$<br>(Also, conditionaing can also lose independences)</p>
+<h5 id="d-seperation"><a href="#d-seperation" class="headerlink" title=" d-seperation"></a><a name="d_seperation"></a> d-seperation</h5><p>Definiation: X and Y are d-seperated in a directed graph G given Z if there is no active trial in G between X and Y given Z.<br>Notation: $d$-$sep_G(X,Y\mid Z)$</p>
+<p>Any node is d-seperated from its non-descendants given its partens, $p(X_1,X_2,…,X_n)=\prod_i p(X_i\mid Par_G(X_i))$</p>
+<h5 id="I-Maps-Indenpendency-Map"><a href="#I-Maps-Indenpendency-Map" class="headerlink" title=" I-Maps (Indenpendency Map)"></a><a name="i_maps"></a> I-Maps (Indenpendency Map)</h5><p>d-seperation in G $\Rightarrow$ P, a distribution, satisfies corresponding independence statement<br>$I(G)={(X\perp Y \mid Z):d\text{-}sep_G(X,Y|Z)}$ (all the independences)</p>
+<p>Definiation: if P satisfied I(G), we say that G is an I-map (Independency map) of P<br><strong><a href="#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Factorisation-and-I-Maps"><a href="#Factorisation-and-I-Maps" class="headerlink" title=" Factorisation and I-Maps"></a><a name="factorisation_and_i_maps"></a> Factorisation and I-Maps</h5><p>Theorem:</p>
+<ul>
+<li>if P factorises over G, then G is an I-map for P</li>
+<li>if G is an I-map for P, then P factorises over G</li>
+</ul>
+<p>2 equivalent views of graph structure:</p>
+<ul>
+<li>Factorisation: G allows P to be represented</li>
+<li>I-map: Independencies encoded by G hold in P</li>
+</ul>
+<h5 id="Naive-Bayes"><a href="#Naive-Bayes" class="headerlink" title=" Naive Bayes"></a><a name="naive_bayes"></a> Naive Bayes</h5><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/4.jpg" alt="Example"><br>$X_1 \dots X_N$: observation (features)<br>($X_i \perp X_j \mid C$) for all $X_i, X_j$</p>
+<p>$P(C, X_1, X_2, …, X_N)$ = $p(C)\prod_{i=1}^Np(X_i\mid C)$</p>
+<p>$\frac{p(C=c1\mid X_1, X_2, \dots, X_N)}{p(C=c2\mid X_1, X_2, \dots, X_N)}=\frac{p(C=c1)}{p(C=c2)}\prod_{i=1}^N\frac{p(X_i\mid C=c1)}{p(X_i\mid C=c2)}$</p>
+<p><em>Example: Bernoulli Naive Bayes for Text Classification</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/5.jpg" alt="Example"></p>
+<p><em>Example: MultinomialNaive Bayes for Text Classification</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/6.jpg" alt="Example"><br>$N$: the length of this document<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/7.jpg" alt="Probabilities"><br>In order to obtain the probabilities, firstly, calculate the word frequency in each document category based on the dataset; Secondly, normalise each row therefore each element in this big table would be valid probability.</p>
+<ul>
+<li>This model was surprisingly effective in domains with many weakly relevant features.</li>
+<li><em>Strong</em> independence assumptions reduce performance when many features are strongly correlated.<br><strong><a href="#tableofcontents">Back to Table of Contents</a></strong><h5 id="Template-Models"><a href="#Template-Models" class="headerlink" title=" Template Models"></a><a name="template_models"></a> Template Models</h5><h6 id="Temporal-Models-involve-over-time"><a href="#Temporal-Models-involve-over-time" class="headerlink" title=" Temporal Models (involve over time)"></a><a name="temporal_models"></a> Temporal Models (involve over time)</h6><em>Markov Assumption</em><br>$p(X^{0:T})=p(X^0)\prod_{t=0}^{T-1}p(x^{t-1}\mid x^{0:t})$</li>
+</ul>
+<p>The assumption is that: ($X^{t+1} \perp X^{0:t-1} \mid X^t$)</p>
+<p>Therefore, the joint distribution over the entire sequence will be:<br>$p(X^{0:T})=p(X^0)\prod_{t=0}^{T-1}p(x^{t-1}\mid x^{t})$</p>
+<p>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/8.png" alt="Graphical Model"><br>$p(w’,v’,l’,f’,o’|w,v,l,f)=p(w’|w)p(v’|w,v)p(l’|l,v)p(f’|f,w)p(o’|l’,f’)$<br>Initial state distribution:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/9.png" alt="Initial state distribution"><br>$p(w^0,v^0,l^0,f^0,o^0)=p(w^0)p(v^0|l^0)p(l^0)p(f^0)p(o^0|l^0,f^0)$</p>
+<h6 id="2-Time-Slice-Bayesian-Network-2TBN"><a href="#2-Time-Slice-Bayesian-Network-2TBN" class="headerlink" title=" 2 Time-Slice Bayesian Network (2TBN)"></a><a name="2tbn"></a> 2 Time-Slice Bayesian Network (2TBN)</h6><p>A <strong>Template variable</strong> $X(u_1,u_2,…,u_k)$ is instantiated duplicated multiple times and share parameters (conditional probability distribution, CPD).<br>Example:<br>Difficulty(course), Intelligence(Student), Grade(Course, Student)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/10.png" alt="2 Time-Slice Bayesian Network (2TBN)"><br>A transioin model (2TBN) over template variables $X_1,X_2,…,X_N$ is specified as a Bayesian network fragment such that:</p>
+<ul>
+<li>the nodes include $X_1’,…,X_N’$ at time t+1 and a subset of $X_1,…,X_N$ (the time t variables directly affect the state of t+1)</li>
+<li>only the nodes $X_1’,…,X_N’$ have parents and CPD, conditional probability distribution.<br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/11.png" alt="HMM"><br><strong><a href="#tableofcontents">Back to Table of Contents</a></strong><h6 id="Plate-Models"><a href="#Plate-Models" class="headerlink" title=" Plate Models"></a><a name="plate_models"></a> Plate Models</h6><strong>Parameter Sharing</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/12.png" alt="Parameter Sharing"><br><strong>Nested Plates</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/13.png" alt="Nested Plates"><br><strong>Overlapping Plates</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/14.png" alt="Overlapping Plates"><h5 id="Conditional-Probability-Distribution-CPD"><a href="#Conditional-Probability-Distribution-CPD" class="headerlink" title=" Conditional Probability Distribution (CPD)"></a><a name="conditional_probability_distribution"></a> Conditional Probability Distribution (CPD)</h5><h6 id="General-CPD"><a href="#General-CPD" class="headerlink" title=" General CPD"></a><a name="general_cpd"></a> General CPD</h6></li>
+<li>CPD $p(X|Y_1,Y_2,…,Y_K)$ specifies distribution over X for each assignment $y_1,y_2,…,y_k$</li>
+<li>can use any function to specify a factor $\phi(x,y_1,y_2,…,y_k)$ such that $\sum_X\phi(X,Y_1,…,Y_K)=1$ for all $y_1,…,y_k$</li>
+</ul>
+<h6 id="Table-based-CPD"><a href="#Table-based-CPD" class="headerlink" title=" Table-based CPD"></a><a name="table_based_cpd"></a> Table-based CPD</h6><p>A table-based representation of a CPD in a Bayesian network has a size that grows exponentially in the number of parents. There are a variety of other form of CPD that explorit some type of structure in the dependency model to allow for a much more compact representation.<br><strong><a href="#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Context-specific-Independence"><a href="#Context-specific-Independence" class="headerlink" title=" Context-specific Independence"></a><a name="context_specific_independence"></a> Context-specific Independence</h6><p>$p \models (X \perp_c Y | Z, c)$, X a set of variables and  c a particular assignment.<br>$p(X,Y|Z,c) = p(X|Z,c)p(Y|Z,c)$<br>$p(X|Y,Z,c)=p(X|Z,c)$<br>$p(Y|X,Z,c)=p(Y|Z,c)$</p>
+<h6 id="Tree-Structured-CPD"><a href="#Tree-Structured-CPD" class="headerlink" title=" Tree-Structured CPD"></a><a name="tree_structured_cpd"></a> Tree-Structured CPD</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/15.png" alt="Tree-Structured CPD"></p>
+<h6 id="Multiplexer-CPD"><a href="#Multiplexer-CPD" class="headerlink" title=" Multiplexer CPD"></a><a name="multiplexer_cpd"></a> Multiplexer CPD</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/16.png" alt="Multiplexer CPD"></p>
+<script type="math/tex; mode=display">p(Y|Z_{1},Z_2,Z_3)=\begin{cases}
+1 & \text{ if } Y=Z_A (A=a,Y=Z_a) \\
+0 & \text{ otherwise }
+\end{cases}</script><h6 id="Noise-OR-CPD"><a href="#Noise-OR-CPD" class="headerlink" title=" Noise OR CPD"></a><a name="noise_or_cpd"></a> Noise OR CPD</h6><p>Y is true if someone succeed in making it true.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/17.png" alt="Noise OR CPD"></p>
+<h6 id="Sigmoid-CPD"><a href="#Sigmoid-CPD" class="headerlink" title=" Sigmoid CPD"></a><a name="sigmoid_cpd"></a> Sigmoid CPD</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/18.png" alt="Sigmoid CPD"></p>
+<script type="math/tex; mode=display">Z=w_0+\sum_{i=1}^k w_iX_i</script><script type="math/tex; mode=display">P(Y'|X_1,...,X_K)=sigmoid(Z)</script><p><strong><a href="#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Continuous-Variables"><a href="#Continuous-Variables" class="headerlink" title=" Continuous Variables"></a><a name="continuous_variables"></a> Continuous Variables</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/19.png" alt="Image"><br><strong>Linear Gaussian</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/20.png" alt="Linear Gaussian"><br><strong>Conditional Linear Gaussian</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/21.png" alt="Conditional Linear Gaussian"><br><strong>Non-Linear Gaussians</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/22.png" alt="Non-Linear Gaussians"><br><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h4 id="Markov-Network-undirected-graph"><a href="#Markov-Network-undirected-graph" class="headerlink" title=" Markov Network (undirected graph)"></a><a name="markov_network"></a> Markov Network (undirected graph)</h4><h5 id="Markov-Network-Fundamentals"><a href="#Markov-Network-Fundamentals" class="headerlink" title=" Markov Network Fundamentals"></a><a name="markov_network_fundamentals"></a> Markov Network Fundamentals</h5><h6 id="Pairwise-Markov-Networks"><a href="#Pairwise-Markov-Networks" class="headerlink" title=" Pairwise Markov Networks"></a><a name="pairwise_markov_networks"></a> Pairwise Markov Networks</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/23.png" alt="Example"><br>A Pairwise Markov Network is an undirected graph whose nodes are $x_1,…,x_u$.</p>
+<p>Each edge $x_i - x_j$ is associated with a factor (potential):</p>
+<p>$\phi_{ij}(i,j)$</p>
+<h6 id="General-Gibbs-Distribution-a-more-general-expression"><a href="#General-Gibbs-Distribution-a-more-general-expression" class="headerlink" title=" General Gibbs Distribution (a more general expression)"></a><a name="general_gibbs_distribution"></a> General Gibbs Distribution (a more general expression)</h6><p>Even for a fully connected pairwise markov network, it is not fully expressive (i.e., it can not represent any probability distribution over random variables, not sufficiently expressive to capture all probability distribution).</p>
+<p>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/24.png" alt="Example"><br>For the above fully connected pairwise Markov network, we will have $C_4^2 edges * 2^2$ assignments, $O(n^2d^2)$. n is the number of edges and d is the number of how many possible values each variable can take on. However, for a general markov network, the complexity of assignments is $O(d^n)$ which is much larger than $O(n^2d^2)$. Therefore, we need a general representation method to increase the coverage.</p>
+<p><strong><em>Gibbs Distribution</em></strong> (represents distribution as a product of factors)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/25.png" alt="Gibbs Distribution"></p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Induced-Markov-Network-connects-every-pair-of-nodes-that-are-in-the-same-factor"><a href="#Induced-Markov-Network-connects-every-pair-of-nodes-that-are-in-the-same-factor" class="headerlink" title=" Induced Markov Network (connects every pair of nodes that are in the same factor)"></a><a name="induced_markov_network"></a> Induced Markov Network (connects every pair of nodes that are in the same factor)</h6><p>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/26.png" alt="Example"><br>More general:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/27.png" alt="more general"><br>Induced Markov Network $H_{\phi}$ has an edge $X_i-X_j$ whenever there exists $\phi_m \in \phi, s.t., X_i, X_j \in D_m$<br><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Factorization"><a href="#Factorization" class="headerlink" title=" Factorization"></a><a name="factorization"></a> Factorization</h6><p>P, a probability distribution, factorised over H (the induced graph for $\phi$) if:</p>
+<p>there exists $\phi={\phi_i(D_i)}={\phi_1(D_1),\phi_2(D_2),…,\phi_k(D_k)}$</p>
+<p>such that:<br>$p=p_{\phi}$ (normalised product of factors)</p>
+<p>Active Trials in Markov Network: A trial $X_1-…-X_N$ is active given $Z$ (observed) if no $X_i$ is in Z.</p>
+<h6 id="Conditional-Random-Fields"><a href="#Conditional-Random-Fields" class="headerlink" title=" Conditional Random Fields"></a><a name="conditional_random_fields"></a> Conditional Random Fields</h6><p>Not to model p(X,Y) but trying to model p(Y|X). X is the input and Y is the target variable.<br><strong>CRF representation</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/28.png" alt="CRF"><br><strong>CRF and Logistic Model</strong> (an example of CRF representation)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/29.png" alt="CRF and logistic model"><br><strong>CRF for languages</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/30.png" alt="CRF for languages"><br>The features could be:<br>is word capitalised, word in atlas or name list, the previous word is “Mrs”, the next word is “Times” etc.<br>the goal of CRF for languages is p(labels|words)<br><strong>Summary for CRF</strong></p>
+<ul>
+<li>A CRF is parameterised the same as a Gibbs distribution, but normalised differently p(Y|X)</li>
+<li>The CRF model do not need to model distribution over variables, we only care the prediction</li>
+<li>allows models with highly expressive features, without worrying about wrong independencies<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/31.png" alt="summary"></li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Independencies-in-Markov-Networks"><a href="#Independencies-in-Markov-Networks" class="headerlink" title=" Independencies in Markov Networks"></a><a name="independencies_in_markov_networks"></a> Independencies in Markov Networks</h6><p><strong>Definition:</strong><br>X and Y are seperated in H (Induced Markov Network Graph) given Z, if there is no active trial in H between X and Y given Z (i.e., no node along trial in Z)<br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/32.png" alt="Example"><br>Theorem:<br>if a probability distribution P factorised over H, and $sep_H$(X,Y|Z)</p>
+<p>then P satisfied $(X\perp Y|Z)$</p>
+<p>For the set which includes independencies, $I(H)={(X\perp Y|Z):sep_{H}(X,Y|Z)}$, if P satisfies I(H), we say that H is a I-map (independency map) of P<br>Theorem: if P factorises over H, the H is an I-Map of P<br>Theorem (Independence =&gt; factorisation):<br>For a positive distribution P (p(x)&gt;0), if H is an I-map of P, the P factorises over H.<br>We can summarise that:</p>
+<ul>
+<li>Factorisation: H allows P to be represented.</li>
+<li>I-map: Independencies encoded by H hold in P</li>
+</ul>
+<p><strong>I-maps and perfect maps</strong><br>Perfet maps capture independencies in a distribution P, $I(P)={(X\perp Y|Z): P \models (X\perp Y|Z)}$.<br>P factorises over G =&gt; G is an I-map for P, $I(G)\subseteq I(P)$<br>However, not always vice versa, there can be independencies in I(P) that are not in I(G).<br>If the graph encodes more independencies,</p>
+<ul>
+<li>it is sparser (has few parameters. We want a sparse graph actually)</li>
+<li>and more informative (we want a graph that captures as much of the structure in P as possible)</li>
+</ul>
+<p><strong>Minimal I-map</strong><br>A minimal I-map does not have redundant edges.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/33.png" alt="Example"><br>A minimal I-map may still cannot capture I(P). A minimal I-map may fail to capture a lot of structure even if they are presented in the distribution and even if it is representable as a Bayes net or as a graphical model.<br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/34.png" alt="Example"><br>if remove the red edge, $D\perp G$; if remove the green one, $I\perp G|D$; if remove the purple one, $D\perp I | G$. They are not the case in our original distribution. None of them can be removed. Therefore, this is also a minimal I-map.<br>A perfect map $I(G)=I(P)$, means G perfectly captures independencies in P. Unfortunately,  a perfect map are hard to come by.<br><strong>Example of doesn’t have a perfect map:</strong><br>IF we consider using Bayes net as perfect maps:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/35.png" alt="Example"><br>Another imperfect map:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/36.png" alt="Example"><br>IF we consider Markov network as a perfect map:<br>Perfect map: $I(H)=I(P)$, (here we use a different symbol replace G by H), H perfectly captures independencies in P (a perfect map is great, but may not exist)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/37.png" alt="Example"><br>Converting BNs &lt;—&gt; MNs losses independencies:</p>
+<ul>
+<li>BN to MN: loss independencies in V-structure</li>
+<li>MN to BN: must add triangulating edges to loops</li>
+</ul>
+<p><strong>Uniqueness of perfect map</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/38.png" alt="Example"><br>Formal Definition: I-equivalence<br>Two graphs G1 and G2 over X1 … Xn are I-equivalent if I(G1)=I(G2) (examples above)<br>Most Gs have many I-equivalent variants.<br>I-equivalence is an important notion. It tells us: there are certain aspects of the graphical model are unidentifiable, which means that if we end up for whatever reason thinking this is the graph that represent our probability distribution, it could just as easyly as this one or that one. So without prior knowledge of some kind or another, for example that we prefer X to be a parent of Y, there is no way for us to select among these different choices.</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Local-Structure-in-Markov-Networks"><a href="#Local-Structure-in-Markov-Networks" class="headerlink" title=" Local Structure in Markov Networks"></a><a name="local_structure_in_markov_networks"></a> Local Structure in Markov Networks</h5><h6 id="Log-linear-Models-CRF-Ising-Model-Metric-MRFs"><a href="#Log-linear-Models-CRF-Ising-Model-Metric-MRFs" class="headerlink" title=" Log-linear Models (CRF, Ising Model, Metric MRFs)"></a><a name="log_linear_models"></a> Log-linear Models (CRF, Ising Model, Metric MRFs)</h6><p>The local structure means we do not need full table representations in both directed and undirected models. Here we will discuss the local structure in undirected models.</p>
+<p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/39.png" alt="local structure"></p>
+<ul>
+<li>each feature $f_j$ has a score $D_j$</li>
+<li>different featrues can have same scope</li>
+</ul>
+<p><strong>Example 1:</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/40.png" alt="Example"><br><strong>Example 2 (CRF):</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/41.png" alt="Example"><br><strong>Example 3 (Ising Model, pair-wise Merkov Network, Joint Spins):</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/42.png" alt="Example"><br><strong>Example 4 (Metric MRFs):</strong><br>All $X_i$ take values in label space V<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/43.png" alt="Example"><br>Distance function $\mu: V*V\to R^{+}$ (non-negative)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/44.png" alt="Example"><br>We have a feature:</p>
+<script type="math/tex; mode=display">f_{ij}(X_i,X_j)=\mu(X_i,X_j)</script><script type="math/tex; mode=display">\exp(-w_{ij} f_{ij}(X_{i},X_{j}))</script><script type="math/tex; mode=display">w_{ij}>0</script><p>we want lower distantce (higher probability).</p>
+<p>lower probability, if the values of Xi and Xj far in  $\mu$.</p>
+<p>Examples of $\mu$:</p>
+<script type="math/tex; mode=display">\mu(v_k,v_l)=\left\{\begin{matrix}
+0&v_k=v_l\\1&otherwise
+\end{matrix}\right.</script><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/45.png" alt="Example"><br>$\mu(v_k,v_l)=min(|v_k-v_l|,d)$<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/46.png" alt="Example"></p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<p><strong>Shared features in Log-Linear Models</strong><br>In most MRFs, same features and weights can be used over many scopes.</p>
+<ul>
+<li>Ising Model<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/47.png" alt="Ising Model"><br>Here, $X_iX_j$ is the feature function, $f(X_i,X_j)$.</li>
+<li>CRF<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/48.png" alt="CRF"></li>
+</ul>
+<p>1) same energy terms $w_k f_k(x_i,y_i)$ repeat for all positions i in the sequence.</p>
+<p>2) same energy terms $w_m f_m(y_i,y_{i+1})$ repeat for all positions i</p>
+<p>Summary:<br>Repeated Features:<br>1) need to specify for each feature $f_k$ a set of scopes, Scopes[$f_k$]<br>2) for each $D_k \in Scope[f_k]$ we have a term $w_kf_k(D_k)$ in the energy function: $w_k\sum f_k(D_k), D_k \in Scopes(f_k)$. Example: Scope[$f_k$] = {Yi,Yj; i and j are adjacient}</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Decision-Making"><a href="#Decision-Making" class="headerlink" title=" Decision Making"></a><a name="decision_making"></a> Decision Making</h5><h6 id="Maximum-Expected-Utility"><a href="#Maximum-Expected-Utility" class="headerlink" title=" Maximum Expected Utility"></a><a name="maxium_expected_utility"></a> Maximum Expected Utility</h6><p>Simple Decision Making:<br>A simple dicision making situation D:</p>
+<ul>
+<li>A set of possible actions Val(A)={$a^1,…,a^k$}, different choices</li>
+<li>A set of states Val(X)={$x_1,…,x_N$}, states of the world</li>
+<li>A distribution p(X|A)</li>
+<li>A utlity function U(X,A)</li>
+</ul>
+<p>The expected utility:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/49.png" alt="EU"></p>
+<p>D is the situation and a is the one of the actions.</p>
+<p>We want to choose action a that maximise EU:<br>$a^*=\text{argmax}_a EU[D(a)]$</p>
+<p><strong><em>Simple Influence Diagram</em></strong></p>
+<ul>
+<li>Note that: Action is not a random variable, so it does not have a CPD (conditional probability distribution)</li>
+</ul>
+<p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/50.png" alt="Simple Influence Diagram"></p>
+<p>EU[$f_0$]=0<br>*EU[$f_1$]=0.5<em>(-7)+0.3</em>5+0.2*20=2</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<p><strong><em>More complex Influence Diagram</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/51.png" alt="Example"><br>$V_G, V_S$ and $V_Q$ represent different components of the utility function (a decomposed utility).<br>$V=V_G + V_S + V_Q$</p>
+<p><strong><em>Information Edges</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/52.png" alt="Information Edges"><br>The survey here means that conducting a survey to investigate the market demand.</p>
+<p>Expected utility with Information:<br>EU[D[$\delta_A$]]=$\sum_{x,a}P_{\delta_A}(X,a)U(X,a)$, a joint probability distribution over X $\cup$ {A}.</p>
+<p>Decision rule $\delta$ at action node A is a CPD, P(A|parents(A)), here is P(F|S). $\delta_A$ is a decision rule for an action.</p>
+<p>We want to choose the decision rule $\delta_A$  that maximises the expected utility $argmax_{\delta_A}EU[D[\delta_A]]$. (MEU(D)=$\max_{\delta_{A}}EU[D[\delta_{A}]]$).</p>
+<p>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/53.png" alt="Example"><br>To maximise the summination: the optimal decision rule is:<br>0+1.15+2.1=3.25 (the agent overall expected utility in this case)</p>
+<p><strong><em>More generally</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/54.png" alt="More Generally"><br>A: actions</p>
+<script type="math/tex; mode=display">\delta_A^*(a|z)=\left\{\begin{matrix}
+1&a=argmax_A\mu(A,Z)\\0&otherwise
+\end{matrix}\right.</script><p><strong><em>Summary</em></strong></p>
+<ul>
+<li>treat A as a random variable with arbitrary (unknown) CPD, $\delta_A(A|Z)$</li>
+<li>introduce utility factor with scope $P_{a_U}$, P is parent, u is utility</li>
+<li>eliminate all variables except A, Z (A’s parents) to produce factor $\mu(A,Z)$</li>
+<li>for each Z (observation) set: we choose the optimal decision rule:<script type="math/tex; mode=display">\delta_A^*(a|z)=\left\{\begin{matrix}
+1&a=argmax_A\mu(A,Z)\\0&otherwise
+\end{matrix}\right.</script></li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Utility-Functions"><a href="#Utility-Functions" class="headerlink" title=" Utility Functions"></a><a name="utility_functions"></a> Utility Functions</h6><p>Lotteries Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/55.png" alt="Lotteries"><br>we can use expected utility to decide which to buy between 2 different lotteries.<br>1)  0.2U($4) + 0.8U($0)<br>2) 0.25U($3) + 0.75U($0)</p>
+<p><strong><em>Utility Curve</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/56.png" alt="Example"><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/57.png" alt="Example"><br><strong><em>Multi-Attribute Utilities</em></strong></p>
+<ul>
+<li>All attributes affecting preferences (e.g., money, time, pleasure, …) must be integrated into one utility function;</li>
+<li>Example: Micromorts 1/1000000 chance of death worth ($\approx $$20, 1980); QALY (quality-adjusted life year)</li>
+</ul>
+<p>Example (prenatal diagnosis):<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/58.png" alt="Example"><br>Break down the utility function as a sum of utilities, $U_1(T) + U_2(K) + U_3(D,L) + U_4(L,F)$</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Value-of-Perfect-Information"><a href="#Value-of-Perfect-Information" class="headerlink" title=" Value of Perfect Information"></a><a name="value_of_perfect_information"></a> Value of Perfect Information</h6><p>(Another question: which observations should I even make before making a decision? Which one is worthwhile and which one is not?)</p>
+<ul>
+<li>VPI(A|X) is the value of observing X before choosing an action at A</li>
+<li>$D$: original influence diagram</li>
+<li>$D_{x\to A}$: influence diagram with edge $x \to A$</li>
+</ul>
+<p><script type="math/tex">VPI(A|X) := MEU(D_{x\to A})-MEU(D)</script>, MEU is maximum expected utility</p>
+<p>Example:<br>First find the MEU decision rules for both and then compute $MEU(D_{x\to A})-MEU(D)$.</p>
+<p>As shown below: $MEU(D_{x\to A})-MEU(D)=3.25-2=1.25$, which means the agent should be willing to pay anthing up to 1.25 utility points in order to conduct the survey.</p>
+<p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/52.png" alt="Example"></p>
+<p><strong><em>Theorem</em></strong><br>$VPI(A|X) := MEU(D_{x\to A})-MEU(D), VPI(A|X) &gt;= 0$</p>
+<p>$VPI(A|X)=0$， if and only if the optimal decision rule for D is still optimal for $D_{x\to A}$.</p>
+<p>Detailed Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/59.png" alt="Example"><br>If the agent does not get any information (observation):</p>
+<p>$EU(D[C_1])=0.1\times0.1+0.2\times0.4+0.7\times0.9=0.72$</p>
+<p>$EU(D[C_2])=0.04+0.2+0.09=0.33$</p>
+<p>What if the agent get to make an observation?<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/60.png" alt="Example"><br>The expected utility (EU) (with observation) is:</p>
+<ul>
+<li>if the agent choose company2, and its state is poor ($S_2=poor$), the EU is 0.1 (stick the original idea, which prefers company1, because the EU is lowere than 0.72)</li>
+<li>if the agent choose company2, and its state is moderate, the EU is 0.4 (stick the original idea, which prefers company1, because the EU is lowere than 0.72)</li>
+<li>if the agent choose company2, and its state is great, the EU is 0.9 (prefer company2, change mind to company2)</li>
+</ul>
+<p>Therefore, the optimal decision rule is:</p>
+<p>$\delta_A(C|S_2)= P(C^2)=1, if S_2=S^3 (great)$</p>
+<p>$\delta_A(C|S_2)= P(C^1)=1, otherwise$</p>
+<p>In this scenario, the MEU value is 0.743.</p>
+<p>$MEU(D_{S_2\to C})=\sum_{S_2,C}\delta(C|S_2)\mu(S_2,C)=0.743$</p>
+<p>0.743 is not a significant improvement over our original MEU value. If observing, the agent shouldn’t be willing to pay his company too much money in order to get information about the detail.</p>
+<p>Another situation (neither company doing great):<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/61.png" alt="Example"></p>
+<p>$EU(D[C_1])=0.35$<br>$EU(D[C_2])=0.04+0.2+0.09=0.33$</p>
+<p>$\delta_A(C|S_2)= P(C^2)=1, if S_2=S^2, S^3 (great)$</p>
+<p>$\delta_A(C|S_2)= P(C^1)=1, otherwise$</p>
+<p>$MEU(D_{S_2\to C})=\sum_{S_2,C}\delta(C|S_2)\mu(S_2,C)=0.43$</p>
+<p>0.43 is much more significant increase.</p>
+<p>Third situation (neither company doing great):<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/62.png" alt="Example"></p>
+<p>$EU(D[C_1])=0.788$<br>$EU(D[C_2])=0.779$</p>
+<p>$\delta_A(C|S_2)= P(C^2)=1, if S_2=S^2, S^3 (great)$</p>
+<p>$\delta_A(C|S_2)= P(C^1)=1, otherwise$</p>
+<p>$MEU(D_{S_2\to C})=\sum_{S_2,C}\delta(C|S_2)\mu(S_2,C)=0.8142$</p>
+<p>In this situation, in the bubble days of the Internet boom and pretty much companys gets funded, with a pretty high probability even if their business models are dubious.<br>(only a small fairly small increase over 0.788 that they could have already guaranteed themselves without making that observation)</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Knowledge-Engineering"><a href="#Knowledge-Engineering" class="headerlink" title=" Knowledge Engineering"></a><a name="knowledge_engineering"></a> Knowledge Engineering</h5><h6 id="Generative-vs-Discriminative"><a href="#Generative-vs-Discriminative" class="headerlink" title=" Generative vs. Discriminative"></a><a name="generative_vs_descriminative"></a> Generative vs. Discriminative</h6><ul>
+<li>Generative: when don’t have a preditermined task (task shifts). Example: medical diagnosis pack: every patient present differently, each patient case, we have different subset of things happend to know (symptoms and tests), we want to measure some variables and predict others; easy to train in certain regimes. (where data is not fully labelled)</li>
+<li>Discriminative: particalar prediction task, need richly expressive features (avoid dealing with corelations), and can achive high performance.</li>
+</ul>
+<h6 id="Designing-a-graphical-model-variable-types"><a href="#Designing-a-graphical-model-variable-types" class="headerlink" title=" Designing a graphical model (variable types)"></a><a name="designing_a_graphical_model"></a> Designing a graphical model (variable types)</h6><ul>
+<li>Target: there are the ones we care about, e.g., a set of diseases in the diagnosis setting</li>
+<li>Observed: not necessary care predicting them, like symptoms and test results in the medical setting</li>
+<li>Latent/hidden: which can simply our structure, example below:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/63.png" alt="Example"></li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Structure"><a href="#Structure" class="headerlink" title=" Structure"></a><a name="structure"></a> Structure</h6><ul>
+<li>Causal versus non-causal ordering.<br>Do the arrows in directed graph corresponding to causality? (Yes and No)<br>No: $X\to Y$ any distribution that we can model on this graphical model where X is a parent of Y, we can equally well model in a model $Y\to X$. In some examples, we can reverse edges and have a model that’s equally expressive. (But the model might be nasty, examples below. Thus the causal ordring is generally more sparser, intuitive and more easier to parameterise)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/64.png" alt="Example"></li>
+</ul>
+<h6 id="Parameters-Local-Structure"><a href="#Parameters-Local-Structure" class="headerlink" title=" Parameters: Local Structure"></a><a name="parameters_local_structure"></a> Parameters: Local Structure</h6><div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Context-Specific</th>
+<th>Aggregating</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Discrete</td>
+<td>tree-CPDs</td>
+<td>sigmoid CPDs</td>
+</tr>
+<tr>
+<td>Continuous</td>
+<td>regression tree (continues version of tree CPD, breaks up the context based on some thresholds on the continuous variables)</td>
+<td>Linear Gaussian</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h6 id="Iterative-Refinement"><a href="#Iterative-Refinement" class="headerlink" title=" Iterative Refinement"></a><a name="iterative_refinement"></a> Iterative Refinement</h6><ul>
+<li>Model testing (ask queries and see whether the answers coming out are reasonable)</li>
+<li>sensitivity analysis for parameter: look at a given query, and ask which parameters have the biggest different on the value of the query, and that means those are probably the ones we should fine tune in order to get best results)</li>
+<li>Error Analysis<ul>
+<li>add features</li>
+<li>add dependencies</li>
+</ul>
+</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h3 id="Inference"><a href="#Inference" class="headerlink" title=" Inference"></a><a name="inference"></a> Inference</h3><p>Overview: how to use the these declarative representation to answer actual queries.</p>
+<h4 id="Conditional-Probability-Queries-Overview"><a href="#Conditional-Probability-Queries-Overview" class="headerlink" title=" Conditional Probability Queries (Overview)"></a><a name="conditional_probability_queries"></a> Conditional Probability Queries (Overview)</h4><p>Evidence: E = e, set of observations<br>Query: a subset of variables Y<br>Task: compute p(Y|E=e) (NP-Hardness)</p>
+<h5 id="Sum-Product-in-Bayes-Network-and-Markov-Network"><a href="#Sum-Product-in-Bayes-Network-and-Markov-Network" class="headerlink" title=" Sum-Product in Bayes Network and Markov Network"></a><a name="sum_product_in_bayes_network_and_markov_network"></a> Sum-Product in Bayes Network and Markov Network</h5><p>Given a PGM $P_{\phi}$ (defined by a set of variables X and factors), value $x \in Val(X)$, and we need compute $P_{\phi}(X=x)$<br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/65.png" alt="Example"><br>Note that each of the CPDs converts a factor over the scope of the family (e.g., P(G|I,D)-&gt;$\phi_G(G,I,D)$).</p>
+<p>If we need to know P(J), we need to compute the follows:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/66.png" alt="P(J)"></p>
+<p>For the sum-product in MN:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/67.png" alt="Sum-Product in MN"></p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Evidence-Reduced-Factors"><a href="#Evidence-Reduced-Factors" class="headerlink" title=" Evidence: Reduced Factors"></a><a name="evidence"></a> Evidence: Reduced Factors</h5><p>$p(Y|E=e)=\frac{P(Y,E=e)}{P(E=e)}$<br>Define: W = {$X_1,X_2,…,X_n$} - Y - E<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/68.png" alt="Evidence"><br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/69.png" alt="Example"><br>If we want to compute p(J|I=i, H=h), we can just compute the above equation and re-normalise.</p>
+<h5 id="Summary-of-Sum-Product-Algorithm"><a href="#Summary-of-Sum-Product-Algorithm" class="headerlink" title=" Summary of Sum-Product Algorithm"></a><a name="summary_of_sum_product_algorithm"></a> Summary of Sum-Product Algorithm</h5><p>$p(Y|E=e)=\frac{P(Y,E=e)}{P(E=e)}$, Y is the query.<br>numerator: $p(Y,E=e)=\sum_w\frac{1}{Z}\prod_k\phi_k’(D_k’)$, reduced by evidence.<br>denominator: $p(E=e)=\sum_Y\sum_w\frac{1}{Z}\prod_k\phi_k’(D_k’)$<br>In practice, we can compute $\sum_w\prod_k\phi’_k(D’_k)$ and renormalise.</p>
+<p>There are many algorithms for computing conditional probability queries.<br>The algorithm list of conditional probability:</p>
+<ul>
+<li>Push summations into factor product<ul>
+<li>Variable elimination (dynamic programming)</li>
+</ul>
+</li>
+<li>Message passing over a graph<ul>
+<li>Belief propagation (exact inference)</li>
+<li>Variational approximations (approximate inference)</li>
+</ul>
+</li>
+<li>Random sampling instantiations (approximate inference)<ul>
+<li>Markov Chain Mente Carlo (MCMC)</li>
+<li>Importance Sampling</li>
+</ul>
+</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h4 id="MAP-Maximum-A-Posterior-Inference-Overview"><a href="#MAP-Maximum-A-Posterior-Inference-Overview" class="headerlink" title=" MAP (Maximum A Posterior) Inference (Overview)"></a><a name="maximum_a_posterior"></a> MAP (Maximum A Posterior) Inference (Overview)</h4><p>Evidence: E = e (observations)<br>Query: all other variables Y (Y = {$X_1, X_2,…,X_n$} - E)<br>Task: compute MAP = $argmax_YP(Y|E=e)$</p>
+<p>Note that:<br>1) there may be more than one possible solution<br>2) MAP $\neq$ Max over margins. Example below:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/70.png" alt="Example"><br>The CPDs are:<br>P(A=0)=0.4<br>P(A=1)=0.6<br>P(B=0|A=0)=0.1<br>P(B=1|A=0)=0.9<br>P(B=0|A=1)=0.5<br>P(B=1|A=1)=0.5<br>Therefore we can get the joint distribution:<br>P(B=0,A=0)=0.04<br>P(B=1,A=0)=0.36<br>P(B=0,A=1)=0.3<br>P(B=1,A=1)=0.3</p>
+<p>Obviously, the assignement which MAP(A,B) is A=0,B=1. Because its has the hightest probability 0.36. However, if we look at the two variables seperately, the A should be assigned as A=1 which is opposite to the A=0. Therefore, we cannot look seperately at the marginal over A and over B.</p>
+<p>Compute MAP is a NP-Hardness problem.</p>
+<p>Given a PGM $P_{\phi}$, find a joint assignment X with the hightest probability $P_{\phi}(X)$.</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Max-Product"><a href="#Max-Product" class="headerlink" title=" Max-Product"></a><a name="max_product"></a> Max-Product</h5><p>Example:<br>$p(J)=argmax_{C,D,I,G,S,L,J,H}\phi_C(C)\phi_D(C,D)\phi_I(I)\phi_G(G,I,D)\phi_S(S,I)\phi_L(L,G)\phi_J(J,L,S)\phi_H(H,D,J)$<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/71.png" alt="Example"></p>
+<p>Algorithms: MAP (there are also different algorithms to solve the problem)</p>
+<ul>
+<li>Push maximisation into factor product<ul>
+<li>variable elimination</li>
+</ul>
+</li>
+<li>Message passing over a graph<ul>
+<li>Max-product belief propagation</li>
+</ul>
+</li>
+<li>Using methods for integer programming (a general class of optimisation which is over discreet spaces)</li>
+<li>For some networks: graph-cut methods</li>
+<li>Combinatorial search (use standard search techniques over combinatorial search spaces)</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h4 id="Variable-Elimination"><a href="#Variable-Elimination" class="headerlink" title=" Variable Elimination"></a><a name="variable_elimination"></a> Variable Elimination</h4><p>The simplest and the most fundamental algorithm.</p>
+<h5 id="Variable-Elimination-Algorithm"><a href="#Variable-Elimination-Algorithm" class="headerlink" title=" Variable Elimination Algorithm"></a><a name="variable_elimination_algorithm"></a> Variable Elimination Algorithm</h5><h6 id="Elimination-in-Chains"><a href="#Elimination-in-Chains" class="headerlink" title=" Elimination in Chains"></a><a name="elimination_in_chains"></a> Elimination in Chains</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/72.png" alt="Elimination in Chains"><br>Ultimately, we will end up with an expression that involves only the variable E.</p>
+<h6 id="Elimination-in-a-more-complicated-BN"><a href="#Elimination-in-a-more-complicated-BN" class="headerlink" title=" Elimination in a more complicated BN"></a><a name="elimination_in_complicated_bn"></a> Elimination in a more complicated BN</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/73.png" alt="Elimination in a more complicated BN"></p>
+<h6 id="Variable-Elimination-with-Evidence"><a href="#Variable-Elimination-with-Evidence" class="headerlink" title=" Variable Elimination with Evidence"></a><a name="variable_elimination_with_evidence"></a> Variable Elimination with Evidence</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/74.png" alt="Variable Elimination with Evidence"><br>If we need to compute P(J|I=i,H=h), we just renormalise the above results.</p>
+<h6 id="Variable-Elimination-in-MNs"><a href="#Variable-Elimination-in-MNs" class="headerlink" title=" Variable Elimination in MNs"></a><a name="variable_elimination_in_mns"></a> Variable Elimination in MNs</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/75.png" alt="Variable Elimination in MNs"></p>
+<h6 id="Summary-Variable-Elimination-Algorithm"><a href="#Summary-Variable-Elimination-Algorithm" class="headerlink" title=" Summary Variable Elimination Algorithm"></a><a name="summary_variable_elimination_algorithm"></a> Summary Variable Elimination Algorithm</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/76.png" alt="Summary"></p>
+<ul>
+<li>reduce all factors by evidence<ul>
+<li>get a set of factors $\Phi$</li>
+</ul>
+</li>
+<li>For each non-query variable Z<ul>
+<li>Eliminate variable Z from $\Phi$</li>
+</ul>
+</li>
+<li>multiply all remaining factors</li>
+<li>renormalising to get distribution</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Complexity-of-Variable-Elimination"><a href="#Complexity-of-Variable-Elimination" class="headerlink" title=" Complexity of Variable Elimination"></a><a name="complexity_of_variable_elimination"></a> Complexity of Variable Elimination</h5><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/77.png" alt="Factor Product and Marginalisation"><br>Factor Product:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/78.png" alt="Factor Product"><br>Factor Marginalisation:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/79.png" alt="Factor Marginalisation"><br>Details:</p>
+<ul>
+<li>Start with <strong>m</strong> factors<ul>
+<li>for Bayesian Networks, m &lt;= <strong>n</strong> (the number of variables). m=n when one factor for each variable</li>
+<li>for Markov Networks, m can be larger than the number of variables</li>
+</ul>
+</li>
+<li>At each elimination step generate <strong>a factor</strong></li>
+<li>at most <strong>n</strong> elimination steps</li>
+<li>total number of factors $m^*\leqslant m+n$</li>
+<li>product operations: $\sum_k(m_k-1)N_k\leqslant N\sum_k(m_k-1)\leqslant Nm^*$, $N=\max(N_k)=$size of the largest factor. Each factor multiply in at most once.</li>
+<li>sum operations $\leqslant \sum_kN_k\leqslant N\cdot$number of elimination steps $\leqslant$ $Nn$. (Total work is linear in N and $m^*$)</li>
+</ul>
+<p>$N_k=|Val(X_k)|=O(d^{rk})$ where: (exponential blow up)</p>
+<ul>
+<li>$d=\max(|Val(X_i)|)$, d values in their scope</li>
+<li>$r_k=|X_k|$ (number of variables in k-th factor) =cardinality of the scope of the k-th factor</li>
+</ul>
+<p><strong><em>Complexity of algorithm depends heavily on the elimination ordering</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/80.png" alt="Depends on the elimination ordering"></p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Graph-based-Perspective-on-Variable-Elimination"><a href="#Graph-based-Perspective-on-Variable-Elimination" class="headerlink" title=" Graph-based Perspective on Variable Elimination"></a><a name="graph_based_perspective_on_variable_elimination"></a> Graph-based Perspective on Variable Elimination</h5><p>View a BN as a undirected graph:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/81.png" alt="View a BN as a undirected graph"><br>all variables connected to I become connected directly.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/82.png" alt="View a BN as a undirected graph"><br>Its a pretty good elimination ordering in this case.</p>
+<p>To summarise:<br><strong><em>Induced Graph</em></strong><br>The induced graph $I_{\Phi,\alpha}$ over factors $\Phi$ and ordering $\alpha$:</p>
+<ul>
+<li>undirected graph</li>
+<li>$X_i$ and $X_j$ are connceted if they appeared in the same factor in a run of the variable elimination (eliminate factors generate new factors) algorithm using $\alpha$ as the ordering</li>
+</ul>
+<p><em>Cliques in the Induced Graph</em><br>Theorem: Every factor produced during VE is a clique in the induced graph.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/84.png" alt="Every factor produced during VE"><br>A clique is a maximal fully connected sub-graph.<br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/83.png" alt="Example"><br>(fully connected each other)<br>It is maximal because we cannot add any other variable to this and still have that property hold. For example, add node S, but S not connects D.</p>
+<p>Theorem: every (maximal) clique in the induced graph is a factor produced during VE.</p>
+<p>Induced width:</p>
+<ul>
+<li>the width of an induced graph is the number of nodes in the largest clique in the graph minus 1.</li>
+<li>minimal induced width of a graph K is $\min_{\alpha}$(width$(I_{k,\alpha})$), $\alpha$ over all possible elimination orders.</li>
+<li>it provides a lower bound on best perfromance (the best achievable complecity) of VE to a model fatorizing over K (graph K)</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Finding-Elimination-Orderings"><a href="#Finding-Elimination-Orderings" class="headerlink" title=" Finding Elimination Orderings"></a><a name="finding_elimination_ordering"></a> Finding Elimination Orderings</h5><ul>
+<li>Greedy seach using heuristic cost function<ul>
+<li>at each point, eliminate node with smallest cost</li>
+</ul>
+</li>
+<li>possible cost functions:<ul>
+<li>min-neighbors: number of neighbors in current graph<ul>
+<li>pick the node has the smallest/minimal number of neighbors</li>
+<li>corresponding to the smallest factor</li>
+<li>the one whose cardinality (the number of variables in this factor) is smallest</li>
+</ul>
+</li>
+<li>min-weight: weight (e.g., number of values) of factor formed</li>
+<li>min-fill: number of new fill edges</li>
+<li>weighted min-fill: total weight of new fill edges (edge weight = product of weights of the 2 nodes)</li>
+</ul>
+</li>
+</ul>
+<p>Theorem: the induced graph is triangulated.</p>
+<ul>
+<li>no loops of length $&gt;$ 3 without a “bridge”<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/85.png" alt="Example"></li>
+<li>can find elimination ordering by finding a low-width (little clique) triangulation of original graph $H_{\phi}$</li>
+</ul>
+<h5 id="Variable-Elimination-Summary"><a href="#Variable-Elimination-Summary" class="headerlink" title=" Variable Elimination (Summary)"></a><a name="variable_elimination_summary"></a> Variable Elimination (Summary)</h5><ul>
+<li>Finding the optimal elimination ordering is NP-hard.</li>
+<li>Simple heuristics that try to keep induced graph small often provide reasonable performance.</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h4 id="Belief-Propagation-Algorithms"><a href="#Belief-Propagation-Algorithms" class="headerlink" title=" Belief Propagation Algorithms"></a><a name="belief_propagation_algorithms"></a> Belief Propagation Algorithms</h4><h5 id="Message-Passing-in-Cluster-Graphs"><a href="#Message-Passing-in-Cluster-Graphs" class="headerlink" title=" Message Passing in Cluster Graphs"></a><a name="message_passing_in_cluster_graphs"></a> Message Passing in Cluster Graphs</h5><p>Build a cluster graph:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/86.png" alt="Example"><br>Passing Messages:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/87.png" alt="Example"><br>Each cluster is going to send messages to its adjacent clusters that reflect the same process as above.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/88.png" alt="Example"></p>
+<p><strong><em>Cluster Graphs (Generalisation Definition)</em></strong></p>
+<ul>
+<li><p>Undirected graph</p>
+<ul>
+<li>Nodes: clusters $C_i\subseteq{X_1,…,X_n}$. $C_i$ is a subset of variables</li>
+<li>Edges: between $C_i$ and $C_j$ associated with subset $S_{i,j} \subseteq C_i \cap C_j$. $S_{i,j}$ is the variables that they talk about</li>
+</ul>
+</li>
+<li><p>Given a set of factors $\Phi$, assign each $\phi_k$ to a cluster $C_{\alpha(k)}$ (one and only one cluster) s.t. Scope[$\phi_k$] $\subseteq C_{\alpha(k)}$ (a subset of $C_{\alpha(k)}$)</p>
+</li>
+<li><p>Define $\psi_i(C_i)=\prod_{k:\alpha(k)=i}\phi_k$</p>
+<ul>
+<li>define a initial belief of a particular cluster the product of all factors that assigned to it</li>
+<li>and some clusters might not have have factors assigned to them, in this case equal to 1.</li>
+</ul>
+</li>
+</ul>
+<p><strong><em>Example Cluster Graph</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/89.png" alt="Example"><br>Initially we have to figure out for each of those factors a cluster in which to put it.</p>
+<ul>
+<li>For A,B,C: there is only one choice because there is only one cluster in the enitre graph that understands abouts all of A, B and C.</li>
+<li>For B,C: however, it has two choinces. It can go into cluster one or two. Both are fine.</li>
+<li>For B,D: also has two choinces.</li>
+<li>For D,E and B,E: they only have one choice.</li>
+<li>For B,D: it has 2 choices.</li>
+<li>For B,D,F: there is only one choice.<br>This is one possible way of assigning the cluster, the factor Flow of Probabilistic Influence (Active Trial)</li>
+</ul>
+<p><strong>When can X influence Y (condition on X can change the beliefs\probablities of Y)?</strong></p>
+<p>X <strong>CAN</strong> influence Y:<br>$X\rightarrow Y$,<br>$X\leftarrow Y$<br>$X\rightarrow W \rightarrow Y$<br>$X\leftarrow W \leftarrow Y$<br>$X\leftarrow W \rightarrow Y$</p>
+<p>X <strong>CANNOT</strong> influence Y:<br>$X\rightarrow W \leftarrow Y$ (V Structure)</p>
+<p><em>Active Trails</em><br>A trial $X_1-X_2-…-X_n$ is active if it has tno clusters.</p>
+<p><em>Different Cluster Graph</em><br>For the exact same set of factors, the clusters have not changed, but the edge changes.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/90.png" alt="Example"></p>
+<p><strong><em>Message Passing</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/91.png" alt="Example"><br>General:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/92.png" alt="General"></p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Belief-Propagation-Algorithm"><a href="#Belief-Propagation-Algorithm" class="headerlink" title=" Belief Propagation Algorithm"></a><a name="belief_propagation_algorithms_2"></a> Belief Propagation Algorithm</h6><ul>
+<li>Assign each factor $\phi_k\in\Phi$ to a cluster $C_{\alpha(k)}$</li>
+<li>Construct initial potentials $\Psi_i(C_i)=\prod_{k:\alpha(k)=i}\phi_k$</li>
+<li>Initialise all messages to be 1</li>
+<li>Repeat: (<strong>until When and how to select edge - different variants of algorithms will be described later on)</strong><ul>
+<li>select edge (i,j) and pass message. $N_i$ is the neighbour.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/92.png" alt="Example"></li>
+</ul>
+</li>
+<li>Compute, belief of this cluster, $\beta_i(C_i) = \Psi_i \times \prod_{k\in N_i} \delta_{k \to i}$. $N_i$ is all the neighbors.</li>
+</ul>
+<p><em>Belief propagation run (approximate)</em><br>Example:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/93.png" alt="Example"><br>The resulting beliefs are pseudo-marginals, but the algorithm actually performs well in a range of practical applications.</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Properties-of-Cluster-Graphs"><a href="#Properties-of-Cluster-Graphs" class="headerlink" title=" Properties of Cluster Graphs"></a><a name="properties_of_cluster_graphs"></a> Properties of Cluster Graphs</h6><p><strong><em>Family Preservation</em></strong><br>Given a set of factors $\Phi$, we assign each $\phi_k$ to a cluster $C_{\alpha(k)}$, s.t. Scope[$\phi_k$]$\in C_{\alpha(k)}$<br>For each factor $\phi_k$ in $\Phi$, there exists a cluster $C_i$ s.t. Scope[$\phi_k$] $\subseteq C_i$</p>
+<p><strong><em>Runing Itersection Property</em></strong><br>For each pair of clusters $C_i$ and $C_j$, and variable $X\in C_i\cap C_j$, there exists a unique path between $C_i$ and $C_j$ for which all clusters and sepsets (edge) contain X.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/94.png" alt="Example"></p>
+<p>Alternative defination of Running Itersection Property —- Equivalently: for any variable X, the set of clusters and sepsets (edges) containing X from a tree. (each variable inducing its own little tree across which information about that variable flows in the graph.)<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/95.png" alt="Example"></p>
+<p>If X and Y are very strongly correlated, BP does poorly when have sharing parameters, due to the feedback loops. The more skewed the probabilities in your graphical mode, the harder time belief propagation has in terms of the results that it gets.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/96.png" alt="Example"></p>
+<p><em>Examples of Illegal Cluster Graphs:</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/97.png" alt="Example"></p>
+<p>For B, there is no way to connect the B in cluster 1 and 2 or 2 and 3. This graph violates the existence.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/98.png" alt="Example"></p>
+<p>This vailates the uniqueness. (the loop, 2 ways between cluster 1 and 4.)<br><em>Examples of Valid Graph:</em><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/99.png" alt="Examples of Valid Graph"></p>
+<p><strong><em>Bethe Cluster Graph</em></strong> (How to construct a cluster graph that has the desired properties?)</p>
+<ul>
+<li>Big Cluster: for each $\phi_k\in\Phi$, a factor cluster $C_k$ = Scope[$\phi_k$]</li>
+<li>Small Cluster: for each $X_i$ a singleton cluster {$X_i$} (variable)</li>
+<li>Edge $C_k$—-$X_i$ if $X_i\in C_k$<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/100.png" alt="Bethe Cluster Graph"></li>
+</ul>
+<p><strong><em>Summary</em></strong></p>
+<ul>
+<li>Cluster graph must satisfy:<ul>
+<li>family preservation: allow $\Phi$ to be encoded</li>
+<li>running intersection: connect all information about any variable, but without feedback loops</li>
+</ul>
+</li>
+<li>Bethe cluster graph is often first default</li>
+<li>Richer cluster graph stuctures (e.g., more edges) can offer different trade-offs. wrt. computational cost (increasing the amount of sizes of the messages that are passed that can grow more expensive) but at the same time imprve the preservation of dependencies as messages are passed in the graph so that more information is actually kept and not lost in this message passing process.</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Properties-of-Belief-Propagation"><a href="#Properties-of-Belief-Propagation" class="headerlink" title=" Properties of Belief Propagation"></a><a name="properties_of_belife_propagation"></a> Properties of Belief Propagation</h6><p><strong><em>Calibration</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/101.png" alt="Calibration"><br> A cluster graph is calibrated if every pair of adjacent clusters $C_i$ and $C_j$ agree on their sepset $S_{i,j}$:</p>
+<p> $\sum_{C_i-S_{ij}}\beta_i(C_i)=\sum_{C_j-S_{ij}}\beta_j(C_j)$. In other words, the marginilised beliefs are equal.</p>
+<p> <strong><em>Convergence ($\to$ Calibration)</em></strong><br> $\delta_{i\to j}(S_{ij})=\delta’_{i\to j}(S_{ij})$, equal the message at previous time step.<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/102.png" alt="Convergence"><br>The expression above is corresponds to the sepset belief:<br>$\mu_{i,j}(S_{i,j})=\delta_{j\to i}\delta_{i\to j}=\sum_{C_j-S_{i,j}}\beta_j(C_j)$</p>
+<p><strong><em>Reparameterisation</em></strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/103.png" alt="Reparameterisation"><br>If we write in this form:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/104.png" alt="Reparameterisation"><br>It can be seen that it is simply the unnormalised measure. It implicates the term/ratio is simply a different set of parameters that captures the original un-normalised measure that defined our distribution.<br>Therefore, we have not lost information as a result of belief propagation algorithm. The distribution is still there, just a different set of parameters.</p>
+<p><strong><em>Summary</em></strong><br>Cluster graph beliefs are an alternative, calibrated, parametorisation of the original unnormalised density.</p>
+<ul>
+<li>No information is lost by message passing.</li>
+<li>Reparametorised the original distribution into a more convenient and easily usable form.</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h5 id="Clique-Trees-faster-and-exact-answer-of-inference"><a href="#Clique-Trees-faster-and-exact-answer-of-inference" class="headerlink" title=" Clique Trees (faster and exact answer of inference)"></a><a name="clique_trees"></a> Clique Trees (faster and exact answer of inference)</h5><p>A speical case of cluster graph which has the performance guarantee. (faster, exact answer of inference).</p>
+<h6 id="Message-Passing-in-Trees"><a href="#Message-Passing-in-Trees" class="headerlink" title=" Message Passing in Trees"></a><a name="message_passing_in_trees"></a> Message Passing in Trees</h6><p>A simple example tree:<br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/105.png" alt="Example"><br>As you can see, we have marginalised out in a legal order.</p>
+<p><strong>Clique Tree:</strong><br>Undirected tree such that:</p>
+<ul>
+<li>nodes are clusters $C_i\subseteq{X_1…X_n}$</li>
+<li>edge between $C_i$ and $C_j$ associated with sepset $S_{ij}=C_i\cap C_j$<br>(For each pair of clusters $C_i$ and $C_j$, and variable $X\in C_i\cap C_j$, in the unique path between $C_i$ and $C_j$, all clusters and sepsets contain X)</li>
+</ul>
+<p><strong>More Complex Clique Tree:</strong><br><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/106.png" alt="Example"></p>
+<p><strong>Clique Tree Correctness:</strong></p>
+<ul>
+<li>If X is eliminated when we pass the message $C_i \to C_j$</li>
+<li>Then X does not appear in the $C_j$ side of tree</li>
+</ul>
+<p><strong>Summary:</strong></p>
+<ul>
+<li>In this case, computation is a variant of variable elimination</li>
+<li>Resulting beliefs are guaranteed to be correct marginals</li>
+</ul>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h6 id="Computation"><a href="#Computation" class="headerlink" title=" Computation"></a><a name="message_passing_in_trees_computation"></a> Computation</h6><p><img src="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/107.png" alt="Message Passing"><br>We can compute all of the messages in this entire tree in one paths in either direction. One path is from left to right and one path from right to left. In the context of chain structures, you might see this under the name <strong>forward-backward algorithm</strong>. This is very commonly used in things like the hidden Markov model and other similar chain structured representations.</p>
+<p>Once …</p>
+<p><a href="#tableofcontents">Back to Table of Contents</a></p>
+<h3 id="Learning"><a href="#Learning" class="headerlink" title=" Learning"></a><a name="learning"></a> Learning</h3>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/" data-id="cm7elzvmz000dmgtjtflb5zsl" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/11/01/Improving-Your-English-Communication-Skills/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Improving Your English Communication Skills
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/23/Super-Machine-Learning-Revision-Notes/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">Super Machine Learning Revision Notes</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

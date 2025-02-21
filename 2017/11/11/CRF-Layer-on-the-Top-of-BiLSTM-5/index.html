@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CRF Layer on the Top of BiLSTM - 5 | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2.5 The total score of all the pathsIn the last section, we learned how to calculate the label path score of one path that is $e^{S_i}$. So far, we have one more problem which is needed to be solved,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CRF Layer on the Top of BiLSTM - 5">
+<meta property="og:url" content="http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="2.5 The total score of all the pathsIn the last section, we learned how to calculate the label path score of one path that is $e^{S_i}$. So far, we have one more problem which is needed to be solved,">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/qr_code.jpg">
+<meta property="og:updated_time" content="2020-04-03T23:04:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CRF Layer on the Top of BiLSTM - 5">
+<meta name="twitter:description" content="2.5 The total score of all the pathsIn the last section, we learned how to calculate the label path score of one path that is $e^{S_i}$. So far, we have one more problem which is needed to be solved,">
+<meta name="twitter:image" content="http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/qr_code.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CRF-Layer-on-the-Top-of-BiLSTM-5" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/" class="article-date">
+  <time datetime="2017-11-10T16:19:39.000Z" itemprop="datePublished">2017-11-11</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CRF Layer on the Top of BiLSTM - 5
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="2-5-The-total-score-of-all-the-paths"><a href="#2-5-The-total-score-of-all-the-paths" class="headerlink" title="2.5 The total score of all the paths"></a>2.5 The total score of all the paths</h4><p>In the last section, we learned how to calculate the label path score of one path that is $e^{S_i}$. So far, we have one more problem which is needed to be solved, how to obtain the total score of all the paths ($ P_{total} = P_1 + P_2 + … + P_N = e^{S_1} + e^{S_2} + … + e^{S_N} $).</p>
+<p>The simplest way to measure the total score is that: enumerating all the possible paths and sum their scores. Yes, you can calculate the total score in that way. However, it is very inefficient. The training time will be unbearable.<br><a id="more"></a><br>Before you explore the following content, I suggest that you can prepare a blank paper and a pen, and follow the steps listed in the toy example. I am sure this will help you to understand the algorithm details well. Moreover, you should know how to implement it by your favorite programming language.</p>
+<p><strong>Step 1: recall the CRF loss function</strong></p>
+<p>In <a href="https://createmomo.github.io/2017/10/08/CRF-Layer-on-the-Top-of-BiLSTM-3/">section 2.3</a>, we defined the CRF loss function as:</p>
+<p>$ Loss Function = \frac{P_{RealPath}}{P_1 + P_2 + … + P_N}  $</p>
+<p>Now We change the loss function into a log loss function:</p>
+<p>$ LogLossFunction = \log \frac{P_{RealPath}}{P_1 + P_2 + … + P_N}  $</p>
+<p>Because when we are training a model, usually our goal is to <strong>minimize</strong> our loss function, we add a negative sign:</p>
+<p>$ Log Loss Function $<br>$= - \log \frac{P_{RealPath}}{P_1 + P_2 + … + P_N}  $</p>
+<p>$= - \log \frac{e^{S_{RealPath}}}{e^{S_1} + e^{S_2} + … + e^{S_N}}  $</p>
+<p>$= - (\log(e^{S_{RealPath}}) - \log(e^{S_1} + e^{S_2} + … + e^{S_N}))$</p>
+<p>$= - (S_{RealPath} - \log(e^{S_1} + e^{S_2} + … + e^{S_N}))$</p>
+<p>$= - ( \sum_{i=1}^{N} x_{iy_i} + \sum_{i=1}^{N-1} t_{y_iy_{i+1}} - \log(e^{S_1} + e^{S_2} + … + e^{S_N}))$</p>
+<p>In previous <a href="https://createmomo.github.io/2017/10/17/CRF-Layer-on-the-Top-of-BiLSTM-4/">section</a>, we have already known how to calculate the real path score, now we need to find an effective solution to calculating $\log(e^{S_1} + e^{S_2} + … + e^{S_N})$.</p>
+<p><strong>Step 2: recall the Emission and Transition Score</strong></p>
+<p>To simplify, we assume we are training  our model from this toy sentence whose length is only 3:</p>
+<p>$\mathbf{x} = [w_0, w_1, w_2]$</p>
+<p>Moreover, in our dataset, we have two labels:<br>$LabelSet = \{l_1,l_2\}$</p>
+<p>We also have the <strong>Emission</strong> scores obtained from the output of Bi-LSTM layer as described in <a href="https://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/">section 2.1</a>:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$\mathbf{l_1}$</th>
+<th>$\mathbf{l_2}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\mathbf{w_0}$</td>
+<td>$x_{01}$</td>
+<td>$x_{02}$</td>
+</tr>
+<tr>
+<td>$\mathbf{w_1}$</td>
+<td>$x_{11}$</td>
+<td>$x_{12}$</td>
+</tr>
+<tr>
+<td>$\mathbf{w_2}$</td>
+<td>$x_{21}$</td>
+<td>$x_{22}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>$x_{ij}$ denotes the score of $w_i$ being labelled $l_j$.</p>
+<p>Moreover, the Transition scores are from the CRF Layer as shown in <a href="https://createmomo.github.io/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/">section 2.2</a>: </p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$\mathbf{l_1}$</th>
+<th>$\mathbf{l_2}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\mathbf{l_1}$</td>
+<td>$t_{11}$</td>
+<td>$t_{12}$</td>
+</tr>
+<tr>
+<td>$\mathbf{l_2}$</td>
+<td>$t_{21}$</td>
+<td>$t_{22}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>$t_{ij}$ is the score of label transition from label $i$ to label $j$.</p>
+<p><strong>Step 3: START FIGHTING! (Paper and Pen get ready)</strong></p>
+<p><strong>Remeber:</strong> Our goal is: $\log(e^{S_1} + e^{S_2} + … + e^{S_N})$</p>
+<hr>
+<p>The process is an accumlation of scores. The idea is similar with dynamic programing (if you do not know what is dynamic programing, you can also continue reading this article. I will explain the toy example step-by-step. But I strongly recommend you to learn the dynamic programing algorithm). In short, the total score of all the possible paths of $w_0$ is calculated. Then, we use the total score to calculate that of $w_0 &rightarrow; w_1$. Finally, we use the lastest total score to calculate that of $w_0 &rightarrow; w_1 &rightarrow; w_2$. The final total score is what we need.</p>
+<p>In the following step, you will see two variables: <strong><em>obs</em></strong> and <strong><em>previous</em></strong>. <strong><em>previous</em></strong> stores the final results of previous steps. <strong><em>obs</em></strong> denotes the information from current word.</p>
+<hr>
+<p><strong>$w_0$:</strong></p>
+<p>$obs = [x_{01}, x_{02}]$<br>$previous = None$</p>
+<p>If our sentence only has one word, $w_0$, we do not have the results from previous steps, therefore $previous$ is None. In addition, we can only observe the first word which is $obs = [x_{01}, x_{02}]$. $x_{01}$ and $x_{02}$ are the emission scores mentioned above.</p>
+<p>You may think, what is the total score of all the possible paths of $w_0$? The answer is very simple and it is:</p>
+<p>$TotalScore(w_0)=\log (e^{x_{01}} + e^{x_{02}})$</p>
+<hr>
+<p><strong>$w_0$ &rightarrow; $w_1$:</strong></p>
+<p>$obs = [x_{11}, x_{12}]$<br>$previous = [x_{01}, x_{02}]$</p>
+<p><strong>(Be careful and follow closely)</strong></p>
+<p>1) Expand the <em>previous</em> to:</p>
+<script type="math/tex; mode=display">
+previous =
+\begin{pmatrix}
+
+x_{01}&x_{01}\\
+x_{02}&x_{02}
+
+\end{pmatrix}</script><p>2) Expand the <em>obs</em> to:</p>
+<script type="math/tex; mode=display">
+obs =
+\begin{pmatrix}
+
+x_{11}&x_{12}\\
+x_{11}&x_{12}
+
+\end{pmatrix}</script><p>You may be wondering, why we need to expand <em>previous</em> and <em>obs</em> to matrices. Because maxtrices can make the calculation of total score efficient. You will see that very soon in the following procedure.</p>
+<p>3) Sum <em>previous</em>, <em>obs</em> and transition scores:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}&x_{01}\\
+x_{02}&x_{02}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+x_{11}&x_{12}\\
+x_{11}&x_{12}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+t_{11}&t_{12}\\
+t_{21}&t_{22}
+
+\end{pmatrix}</script><p>Then:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}+x_{11}+t_{11}&x_{01}+x_{12}+t_{12}\\
+x_{02}+x_{11}+t_{21}&x_{02}+x_{12}+t_{22}
+
+\end{pmatrix}</script><p>Change the value of <em>previous</em> for the next iteration:</p>
+<script type="math/tex; mode=display">
+previous=[\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}), \log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})]</script><p>Actually, the second iteration has been finished. In case, some people would like to know how to calculate the total score of all the possible paths ($label_1$ &rightarrow; $label_1$, $label_1$ &rightarrow; $label_2$, $label_2$ &rightarrow; $label_1$, $label_2$ &rightarrow; $label_2$) from $w_0$ to $w_1$, you can do the calculation as follows.</p>
+<p>We use the elements in the new <em>previous</em>:</p>
+<p>$TotalScore(w_0 &rightarrow; w_1)$<br>$=\log (e^{previous[0]} + e^{previous[1]})$<br>$=\log (e^{\log(e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})}+<br>e^{\log(e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})}<br>)$<br>$=\log(e^{x_{01}+x_{11}+t_{11}}+e^{x_{02}+x_{11}+t_{21}}+e^{x_{01}+x_{12}+t_{12}}+e^{x_{02}+x_{12}+t_{22}})$</p>
+<p>Do you find something? Yes, this is exactly our goal, $\log(e^{S_1} + e^{S_2} + … + e^{S_N})$.</p>
+<p>In the equation, we can see:</p>
+<ul>
+<li>$S_1 = x_{01}+x_{11}+t_{11}$ ($label_1$ &rightarrow; $label_1$) </li>
+<li>$S_2 = x_{02}+x_{11}+t_{21}$ ($label_2$ &rightarrow; $label_1$) </li>
+<li>$S_3 = x_{01}+x_{12}+t_{12}$ ($label_1$ &rightarrow; $label_2$) </li>
+<li>$S_4 = x_{02}+x_{12}+t_{22}$ ($label_2$ &rightarrow; $label_2$) </li>
+</ul>
+<hr>
+<p><strong>$w_0$ &rightarrow; $w_1$ &rightarrow; $w_2$:</strong></p>
+<p>If you are reading here, you are almost done. In fact, in this iteration, we will do the same procedure as described in the last iteration.</p>
+<p>$obs = [x_{21}, x_{22}]$<br>$<br>previous=[\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}), \log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})]<br>$</p>
+<p>1) Expand the <em>previous</em> to:</p>
+<script type="math/tex; mode=display">
+previous =
+\begin{pmatrix}
+
+\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})&\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})\\
+\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})&\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})
+
+\end{pmatrix}</script><p>2) Expand the <em>obs</em> to:</p>
+<script type="math/tex; mode=display">
+obs =
+\begin{pmatrix}
+
+x_{21}&x_{22}\\
+x_{21}&x_{22}
+
+\end{pmatrix}</script><p>3) Sum <em>previous</em>, <em>obs</em> and transition scores:</p>
+<script type="math/tex; mode=display">
+scores =
+
+\begin{pmatrix}
+
+\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})&\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})\\
+\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})&\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+x_{21}&x_{22}\\
+x_{21}&x_{22}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+t_{11}&t_{12}\\
+t_{21}&t_{22}
+
+\end{pmatrix}</script><p>Then:</p>
+<script type="math/tex; mode=display">
+scores =
+
+\begin{pmatrix}
+
+\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}) + x_{21} + t_{11}
+
+&\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}) + x_{22} + t_{12}\\
+
+\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}}) + x_{21} + t_{21}
+
+&\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}}) + x_{22} + t_{22}
+
+\end{pmatrix}</script><p>Change the value of <em>previous</em> for the next iteration:</p>
+<p>$<br>previous =<br>[<br>$</p>
+<script type="math/tex; mode=display">
+\log( 
+e^{\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}) + x_{21} + t_{11}}
++
+e^{\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}}) + x_{21} + t_{21}}
+),</script><script type="math/tex; mode=display">
+\log(
+e^{\log (e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}}) + x_{22} + t_{12}}
++
+e^{\log (e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}}) + x_{22} + t_{22}})</script><p>$<br>]<br>$<br>$=[\log(<br>(e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})e^{x_{21} + t_{11}}<br>+<br>(e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})e^{x_{21} + t_{21}}<br>),$<br>$\log(<br>(e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})e^{x_{22} + t_{12}}<br>+<br>(e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})e^{x_{22} + t_{22}})]$</p>
+<p>As described in the last iteration, we use the elements in the new <em>previous</em> to calculate the total score:</p>
+<p>$TotalScore(w_0 &rightarrow; w_1 &rightarrow; w_2)$<br>$=\log (e^{previous[0]} + e^{previous[1]})$<br>$=\log (e^{\log(<br>(e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})e^{x_{21} + t_{11}}<br>+<br>(e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})e^{x_{21} + t_{21}}<br>)}$<br>$+e^{\log(<br>(e^{x_{01}+x_{11}+t_{11}} + e^{x_{02}+x_{11}+t_{21}})e^{x_{22} + t_{12}}<br>+<br>(e^{x_{01}+x_{12}+t_{12}} + e^{x_{02}+x_{12}+t_{22}})e^{x_{22} + t_{22}})}<br>)$</p>
+<p>$=\log (e^{x_{01}+x_{11}+t_{11}+x_{21}+t_{11}}+e^{x_{02}+x_{11}+t_{21}+x_{21}+t_{11}}$<br>$+e^{x_{01}+x_{12}+t_{12}+x_{21}+t_{21}}+e^{x_{02}+x_{12}+t_{22}+x_{21}+t_{21}}$<br>$+e^{x_{01}+x_{11}+t_{11}+x_{22}+t_{12}}+e^{x_{02}+x_{11}+t_{21}+x_{22}+t_{12}}$<br>$+e^{x_{01}+x_{12}+t_{12}+x_{22}+t_{22}}+e^{x_{02}+x_{12}+t_{22}+x_{22}+t_{22}})$</p>
+<p><strong>Congratulations!</strong></p>
+<p>We achieve the goal, $\log(e^{S_1} + e^{S_2} + … + e^{S_N})$. There are three words in our toy sentence and two labels in our label set. Therefore, there should be totally 8 possible label paths.</p>
+<hr>
+<p>Before you enjoy a cup of coffee or a sweet cake to have a rest, please allow me to say something. Although you find the process quite complicated, the implementation of this algorithm would be much much easier. One of the advantages of computer is to do repetitive work.</p>
+<p>Now you can implement the CRF loss function by yourself and start to train your own model.</p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><h4 id="2-6-Infer-the-labels-for-a-new-sentence"><a href="#2-6-Infer-the-labels-for-a-new-sentence" class="headerlink" title="2.6 Infer the labels for a new sentence"></a>2.6 Infer the labels for a new sentence</h4><p>We have learnt the details of CRF loss function, the next step is how to infer the labels for a new sentence when we apply our model to a test set.</p>
+<p><strong>(Sorry for my late update, I will try my best to squeeze time for updating the following sections.)</strong></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1]  Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K. and Dyer, C., 2016. Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360.<br><a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">https://arxiv.org/abs/1603.01360</a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please subscribe to the public account by your Wechat! (2020-04-03)<br><img src="/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/qr_code.jpg" alt="QR Code"></p>
+<blockquote>
+<p>When you reprint or distribute this article, please include the original link address.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/" data-id="cm7elzvme0004mgtjmlr72bmy" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CRF Layer on the Top of BiLSTM - 6
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/10/17/CRF-Layer-on-the-Top-of-BiLSTM-4/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CRF Layer on the Top of BiLSTM - 4</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

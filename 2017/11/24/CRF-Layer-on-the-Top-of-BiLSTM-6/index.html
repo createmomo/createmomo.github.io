@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CRF Layer on the Top of BiLSTM - 6 | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="2.6 Infer the labels for a new sentenceIn the previous sections, we learned the structure of BiLSTM-CRF model and the details of CRF loss function. You can implement your own BiLSTM-CRF model by vario">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CRF Layer on the Top of BiLSTM - 6">
+<meta property="og:url" content="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="2.6 Infer the labels for a new sentenceIn the previous sections, we learned the structure of BiLSTM-CRF model and the details of CRF loss function. You can implement your own BiLSTM-CRF model by vario">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/dog.png">
+<meta property="og:image" content="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/qr_code.jpg">
+<meta property="og:updated_time" content="2020-04-03T23:04:21.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CRF Layer on the Top of BiLSTM - 6">
+<meta name="twitter:description" content="2.6 Infer the labels for a new sentenceIn the previous sections, we learned the structure of BiLSTM-CRF model and the details of CRF loss function. You can implement your own BiLSTM-CRF model by vario">
+<meta name="twitter:image" content="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/dog.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CRF-Layer-on-the-Top-of-BiLSTM-6" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/" class="article-date">
+  <time datetime="2017-11-24T15:45:44.000Z" itemprop="datePublished">2017-11-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CRF Layer on the Top of BiLSTM - 6
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h4 id="2-6-Infer-the-labels-for-a-new-sentence"><a href="#2-6-Infer-the-labels-for-a-new-sentence" class="headerlink" title="2.6 Infer the labels for a new sentence"></a>2.6 Infer the labels for a new sentence</h4><p>In the previous sections, we learned the structure of BiLSTM-CRF model and the details of CRF loss function. You can implement your own BiLSTM-CRF model by various opensource frameworks (Keras, Chainer, TensorFlow etc.). One of the greatest things is the backpropagation of on your model is automatically computed on these frameworks, therefore you do not need to implement the backpropagation by yourself to train your model (i.e. compute the gradients and to update parameters). Moreover, some frameworks have already implemented the CRF layer, so combining a CRF layer with your own model would be very easy by only adding about one line code.</p>
+<p>In this section, we will explore how to infer the labels for a sentence during the test when our model is ready.<br><a id="more"></a></p>
+<p><strong>Step 1: Emission and transition scores from the BiLSTM-CRF model</strong></p>
+<p>Let us say, we have a sentence with 3 words: $\mathbf{x} = [w_0, w_1, w_2]$</p>
+<p>Moreover, we have already got the emission scores from the BiLSTM model and the transition scores from the CRF Layer below:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$\mathbf{l_1}$</th>
+<th>$\mathbf{l_2}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\mathbf{w_0}$</td>
+<td>$x_{01}$</td>
+<td>$x_{02}$</td>
+</tr>
+<tr>
+<td>$\mathbf{w_1}$</td>
+<td>$x_{11}$</td>
+<td>$x_{12}$</td>
+</tr>
+<tr>
+<td>$\mathbf{w_2}$</td>
+<td>$x_{21}$</td>
+<td>$x_{22}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>$x_{ij}$ denotes the score of $w_i$ being labelled $l_j$.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>$\mathbf{l_1}$</th>
+<th>$\mathbf{l_2}$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\mathbf{l_1}$</td>
+<td>$t_{11}$</td>
+<td>$t_{12}$</td>
+</tr>
+<tr>
+<td>$\mathbf{l_2}$</td>
+<td>$t_{21}$</td>
+<td>$t_{22}$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>$t_{ij}$ is the score of label transition from label $i$ to label $j$.</p>
+<p><strong>Step 2: Start Inference</strong></p>
+<hr>
+<p>If you are familar with Viterbi algorithm, this section would be easy for you. But if you are not, please do not worry about that. Similar with the previous section, I will explain the algorithm step-by-step. We will run the inference algorithm from left to right of the sentence as shown below:</p>
+<ul>
+<li><strong>$w_0$</strong></li>
+<li><strong>$w_0$ &rightarrow; $w_1$</strong></li>
+<li><strong>$w_0$ &rightarrow; $w_1$ &rightarrow; $w_2$</strong></li>
+</ul>
+<p>You will see two variables: <strong><em>obs</em></strong> and <strong><em>previous</em></strong>. <strong><em>previous</em></strong> stores the final results of previous steps. <strong><em>obs</em></strong> denotes the information from current word.</p>
+<p>$\mathbf{alpha_0}$ is the history of best scores and $\mathbf{alpha_1}$ is the history of the corresponding indexes. The details of these two variables will be explained when they occur. Please see the picture below: You can treat these two variables as “marks” the dog made along the road when he explores the forest and these “marks” would be helpful to assist him finding the way to get back home.<br><img src="/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/dog.png" alt="The dog needs to find the best path to get his favorite bone toy and return home following the way he came"></p>
+<hr>
+<p><strong>$w_0$:</strong></p>
+<p>$obs = [x_{01}, x_{02}]$<br>$previous = None$</p>
+<p>Currently, we are observing the first word $w_0$. So far the best label for $w_0$ is straightforward. </p>
+<p>For example, if $obs = [x_{01}=0.2, x_{02}=0.8]$, obviously, the best label for $w_0$ should be <em>$l_2$</em></p>
+<p>Because there is only one word and no transitions between labels, the transition scores are not used.</p>
+<hr>
+<p><strong>$w_0$ &rightarrow; $w_1$:</strong></p>
+<p>$obs = [x_{11}, x_{12}]$<br>$previous = [x_{01}, x_{02}]$</p>
+<p><strong>(Be careful and follow closely)</strong></p>
+<p>1) Expand the <em>previous</em> to:</p>
+<script type="math/tex; mode=display">
+previous =
+\begin{pmatrix}
+
+previous[0]&previous[0]\\
+previous[1]&previous[1]
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+x_{01}&x_{01}\\
+x_{02}&x_{02}
+
+\end{pmatrix}</script><p>2) Expand the <em>obs</em> to:</p>
+<script type="math/tex; mode=display">
+obs =
+\begin{pmatrix}
+
+obs[0]&obs[1]\\
+obs[0]&obs[1]
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+x_{11}&x_{12}\\
+x_{11}&x_{12}
+
+\end{pmatrix}</script><p>3) Sum <em>previous</em>, <em>obs</em> and <em>transition</em> scores:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}&x_{01}\\
+x_{02}&x_{02}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+x_{11}&x_{12}\\
+x_{11}&x_{12}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+t_{11}&t_{12}\\
+t_{21}&t_{22}
+
+\end{pmatrix}</script><p>Then:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}+x_{11}+t_{11}&x_{01}+x_{12}+t_{12}\\
+x_{02}+x_{11}+t_{21}&x_{02}+x_{12}+t_{22}
+
+\end{pmatrix}</script><p>You may be wondering there is no difference with the previous section when we compute the total score of all the paths. <strong>Please be patient and careful, you will see the differences very soon</strong>.</p>
+<p>Change the value of <em>previous</em> for the next iteration:</p>
+<script type="math/tex; mode=display">
+previous=[\max (scores[00], scores[10]),\max (scores[01],scores[11])]</script><p>For example, if our scores is:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}+x_{11}+t_{11}&x_{01}+x_{12}+t_{12}\\
+x_{02}+x_{11}+t_{21}&x_{02}+x_{12}+t_{22}
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+0.2&0.3\\
+0.5&0.4
+
+\end{pmatrix}</script><p>Our previous for the next iteration would be:</p>
+<script type="math/tex; mode=display">
+previous=[\max (scores[00], scores[10]),\max (scores[01],scores[11])] = [0.5, 0.4]</script><p>What is the meaning of <em>previous</em>? The previous list stores the maximum score to each label of the current word.</p>
+<p><strong>[Example Start]</strong></p>
+<p>For example:</p>
+<p>We know that in our corpus, we totally have 2 labels, $label1(l_1)$ and $label2(l_2)$. The index of these two labels are 0 and 1 respectively (Because in programming, the index starts from 0 not 1).</p>
+<p>$previous[0]$ is the maximum score of the path which ends with the $0^{th}$ label, $l_1$. Similarly, $previous[1]$ is the maximum score of the path which ends with $l_2$. <strong>In each iteration, the variable $previous$ stores the maximum score of the path which ends up with each label.</strong> In other words, in each iteration, we only keep the information of best path to each label(<script type="math/tex">previous=[\max (scores[00], scores[10]),\max (scores[01],scores[11])]</script>). The information of paths which have less scores will be discarded.</p>
+<p><strong>[Example End]</strong></p>
+<p>Back to our main task:</p>
+<p>At the same time, we also have two variables to store the history information(scores and indexes), $alpha_0$ and $alpha_1$.</p>
+<p>For this iteration, we will add the best scores into $alpha_0$. For your convenience, the maximum score of each label was underlined.</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+x_{01}+x_{11}+t_{11}&x_{01}+x_{12}+t_{12}\\
+\underline{x_{02}+x_{11}+t_{21}}&\underline{x_{02}+x_{12}+t_{22}}
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+0.2&0.3\\
+\underline{0.5}&\underline{0.4}
+
+\end{pmatrix}</script><script type="math/tex; mode=display">
+alpha_0=[(scores[10],scores[11])]=[(0.5,0.4)]</script><p>In addition, the corresponding <strong>column</strong> indexes were kept in $alpha_1$:</p>
+<script type="math/tex; mode=display">
+alpha_1=[(ColumnIndex(scores[10]),ColumnIndex(scores[11]))]=[(1,1)]</script><p>For explanation, the index of $l_1$ is 0 and $l_2$ is 1. So <strong>$(1,1)=(l_2,l_2)$</strong> that means, for the current word $w_i$ and label $l^{(i)}$:</p>
+<p>$(1,1)$<br>$=(l_2,l_2)$<br>$=$(we can get the maximum score 0.5 when the path is $\underline{l^{(i-1)}=l_2}$ &rightarrow; $\underline{l^{(i)}=l_1}$) <strong>,</strong><br>we can get the maximum score 0.4 when the path is $\underline{l^{(i-1)}=l_2}$ &rightarrow; $\underline{l^{(i)}=l_2}$)</p>
+<p>$l^{(i-1)}$ is the label of the previous word $w_{i-1}$.</p>
+<hr>
+<p><strong>$w_0$ &rightarrow; $w_1$ &rightarrow; $w_2$:</strong></p>
+<p>$obs = [x_{21}, x_{22}]$<br>$previous = [0.5, 0.4]$</p>
+<p>1) Expand the <em>previous</em> to:</p>
+<script type="math/tex; mode=display">
+previous =
+\begin{pmatrix}
+
+previous[0]&previous[0]\\
+previous[1]&previous[1]
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+0.5&0.5\\
+0.4&0.4
+
+\end{pmatrix}</script><p>2) Expand the <em>obs</em> to:</p>
+<script type="math/tex; mode=display">
+obs =
+\begin{pmatrix}
+
+obs[0]&obs[1]\\
+obs[0]&obs[1]
+
+\end{pmatrix}=
+\begin{pmatrix}
+
+x_{21}&x_{22}\\
+x_{21}&x_{22}
+
+\end{pmatrix}</script><p>3) Sum <em>previous</em>, <em>obs</em> and <em>transition</em> scores:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+0.5&0.5\\
+0.4&0.4
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+x_{21}&x_{22}\\
+x_{21}&x_{22}
+
+\end{pmatrix}
+
++
+
+\begin{pmatrix}
+
+t_{11}&t_{12}\\
+t_{21}&t_{22}
+
+\end{pmatrix}</script><p>Then:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+0.5+x_{11}+t_{11}&0.5+x_{12}+t_{12}\\
+0.4+x_{11}+t_{21}&0.4+x_{12}+t_{22}
+
+\end{pmatrix}</script><p>Change the value of <em>previous</em> for the next iteration:</p>
+<script type="math/tex; mode=display">
+previous=[\max (scores[00], scores[10]),\max (scores[01],scores[11])]</script><p>Let’s say, the scores we get in this iteration is:</p>
+<script type="math/tex; mode=display">
+scores =
+\begin{pmatrix}
+
+0.6&\underline{0.9}\\
+\underline{0.8}&0.7
+
+\end{pmatrix}</script><p>Therefore, we can get the latest <em>previous</em>:</p>
+<script type="math/tex; mode=display">
+previous=[0.8,0.9]</script><p>Actually, the larger one between $previous[0]$ and $previous[1]$ is the score of the best predicted path.</p>
+<p>At the same time, the maximum scores of each label and indexes will be added into $alpha_0$ and $alpha_1$:</p>
+<script type="math/tex; mode=display">
+alpha_0=[(0.5,0.4),\underline{(scores[10],scores[01])}]</script><script type="math/tex; mode=display">
+=[(0.5,0.4),\underline{(0.8,0.9)}]</script><script type="math/tex; mode=display">
+alpha_1=[(1,1),\underline{(1,0)}]</script><p><strong>Step 3: Find out the best path which has the highest score</strong></p>
+<p>This is the last step! You are most done! In this step, $alpha_0$ and $alpha_1$ will be used to find the path with highest score. We will check the elements in these two lists from the last one to the first one.</p>
+<hr>
+<p><strong>$w_1$ &rightarrow; $w_2$:</strong></p>
+<p>Firstly, check the last element of $alpha_0$ and $alpha_1$: $(0.8,0.9)$ and $(1,0)$. <strong>0.9</strong> means when the label is $l_2$, we can get the highest path score 0.9. We also know the index of $l_2$ is 1, therefore check the value of $(1,0)[1]=0$. The index <strong>“0”</strong> means the previous label is $l_1$(the index of $l_1$ is 0). So we can get the best path of <strong>$w_1$ &rightarrow; $w_2$:</strong> is <strong>$l_1$ &rightarrow; $l_2$</strong>.</p>
+<p><strong>$w_0$ &rightarrow; $w_1$:</strong><br>Second, we continue moving backwards and get the element of $alpha_1$: $(1,1)$. From the last paragraph we know that the label of $w_1$ is $l_1$(index is 0), therefore we can check $(1,1)[0]=1$. So we can get the best path of this part (<strong>$w_0$ &rightarrow; $w_1$:</strong>): <strong>$l_2$ &rightarrow; $l_1$</strong>.</p>
+<p><strong>Congratulations!</strong> The best path we get is <strong>$l_2$ &rightarrow; $l_1$ &rightarrow; $l_2$</strong> for our example.</p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><p>The following sections will focus on the implementation and the code will be released soon.</p>
+<p><strong>(Sorry for my late update, I will try my best to squeeze time for updating the following sections.)</strong></p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1]  Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K. and Dyer, C., 2016. Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360.<br><a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">https://arxiv.org/abs/1603.01360</a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please subscribe to the public account by your Wechat! (2020-04-03)<br><img src="/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/qr_code.jpg" alt="QR Code"></p>
+<blockquote>
+<p>When you reprint or distribute this article, please include the original link address.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/" data-id="cm7elzvmf0005mgtj5691r4f8" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/12/06/CRF-Layer-on-the-Top-of-BiLSTM-7/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CRF Layer on the Top of BiLSTM - 7
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/11/11/CRF-Layer-on-the-Top-of-BiLSTM-5/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">CRF Layer on the Top of BiLSTM - 5</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2017/11/24/CRF-Layer-on-the-Top-of-BiLSTM-6/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

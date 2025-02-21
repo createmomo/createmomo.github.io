@@ -1,0 +1,1462 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>Super Machine Learning Revision Notes | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="[Last Updated: 06/01/2019]This article aims to summarise:  basic concepts in machine learning (e.g. gradient descent, back propagation etc.) different algorithms and various popular models some practi">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Super Machine Learning Revision Notes">
+<meta property="og:url" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="[Last Updated: 06/01/2019]This article aims to summarise:  basic concepts in machine learning (e.g. gradient descent, back propagation etc.) different algorithms and various popular models some practi">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/qr_code.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/gradient_descent_smaller.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mini-batch.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mini_batch_loss.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mini_batch_gradient.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_rate_decay_methods.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_rate_decay_methods_epoch.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/discrete_stair_case.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/batch_normalization.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/weight_init.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning_units_and_layers.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning_alpha_and_beta.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/dropout.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/early_stopping.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sigmoid.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/softmax_regression.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/transfer_learning.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_2d.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_2d_2_filters.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_3d_2_filters.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_stride.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_padding.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_1_convolutional_layer.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/1_1_conv_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/1_1_conv_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_pooling_layer.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_lenet_5.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_alexnet.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_vgg_16.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/resnet.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/inception_network.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_4.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/anchor_box_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/anchor_box_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_4.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_5.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_6.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_7.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_8.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_4.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_5.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_6.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_7.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_8.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_9.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_10.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/1d_and_3d_generalisations.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_forward.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_backprop.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/total_loss.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_back.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/gru_simplified.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/gru_full.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/long_short_term_memory.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bidirectional_rnn.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/deep_rnn_example.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/one_hot.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/embedding_matrix.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/get_embedding.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/get_embedding_equation.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_word_embedding.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/skip_gram_context_target.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/skip_gram_model.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/word_embedding_softmax.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/negative_sampling.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/negative_sampling_model.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sample_word_distribution.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/glove.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/glove_final_embedding.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/forward_language_model.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/backward_langauge_model.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bi_language_model.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/biLM.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/input-embedding.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/elmo.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sequence_to_sequence.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/sequence_to_sequence_model.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/beam_search.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_1.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_3.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/beam_search_error_analysis.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bleu_score_example.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bleu_score.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/combined_bleu_score.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_model_with_comments.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_computation.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_model_on_normalisation.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/transformer.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-0.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-pretrain.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-classification.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-tasks.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_train_and_dev_test.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/solutions_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_train_and_dev_test.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_data_distribution_2.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_summarization.png">
+<meta property="og:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/normalization.png">
+<meta property="og:updated_time" content="2020-04-04T00:07:18.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Super Machine Learning Revision Notes">
+<meta name="twitter:description" content="[Last Updated: 06/01/2019]This article aims to summarise:  basic concepts in machine learning (e.g. gradient descent, back propagation etc.) different algorithms and various popular models some practi">
+<meta name="twitter:image" content="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/qr_code.jpg">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Super-Machine-Learning-Revision-Notes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/23/Super-Machine-Learning-Revision-Notes/" class="article-date">
+  <time datetime="2018-01-22T16:00:00.000Z" itemprop="datePublished">2018-01-23</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Super Machine Learning Revision Notes
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="Last-Updated-06-01-2019"><a href="#Last-Updated-06-01-2019" class="headerlink" title="[Last Updated: 06/01/2019]"></a>[Last Updated: 06/01/2019]</h3><p>This article aims to summarise:</p>
+<ul>
+<li><strong>basic concepts</strong> in machine learning (e.g. gradient descent, back propagation etc.)</li>
+<li><strong>different algorithms and various popular models</strong></li>
+<li>some <strong>practical tips</strong> and <strong>examples</strong> were learned from my own practice and some online courses such as <a href="https://www.deeplearning.ai/" target="_blank" rel="external">Deep Learning AI</a>.</li>
+</ul>
+<p><strong>If you a student</strong> who is studying machine learning, hope this article could help you to shorten your revision time and bring you useful inspiration. <strong>If you are not a student</strong>, hope this article would be helpful when you cannot recall some models or algorithms.</p>
+<p>Moreover, you can also treat it as a <strong>“Quick Check Guide”</strong>. Please be free to use Ctrl+F to search any key words interested you.</p>
+<p><strong><strong>Any comments and suggestions are most welcome!</strong></strong><br><a id="more"></a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please subscribe to the public account by your Wechat! (2020-04-03)<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/qr_code.jpg" alt="QR Code"></p>
+<hr>
+<h2 id="Table-of-Contents"><a href="#Table-of-Contents" class="headerlink" title="Table of Contents"></a><a name="tableofcontents"></a>Table of Contents</h2><ul>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#activation_functions">Activation Functions</a></strong></li>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gradient_descent">Gradient Descent</a></strong><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#computation_graph">Computation Graph</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#backpropagation">Backpropagation</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gradients_for_l2_regularization">Gradients for L2 Regularization (weight decay)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#vanishing_exploding_gradients">Vanishing/Exploding Gradients</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#mini_batch_gradient_descent">Mini-Batch Gradient Descent</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#stochastic_gradient_descent">Stochastic Gradient Descent</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#choosing_mini_batch_size">Choosing Mini-Batch Size</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gradient_descent_with_momentum">Gradient Descent with Momentum (always faster than SGD)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gradient_descent_with_rmsprop">Gradient Descent with RMSprop</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#adam">Adam (put Momentum and RMSprop together)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#learning_rate_decay_methods">Learning Rate Decay Methods</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#batch_normalization">Batch Normalization</a></li>
+</ul>
+</li>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#parameters">Parameters</a></strong><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#learnable_and_hyper_parameters">Learnable and Hyper Parameters</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#parameters_initialization">Parameters Initialization</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#hyper_parameter_tuning">Hyper Parameter Tuning</a></li>
+</ul>
+</li>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#regularization">Regularization</a></strong><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#l2_regularization">L2 Regularization (weight decay)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#l1_regularization">L1 Regularization</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#dropout">Dropout (inverted dropout)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#early_stopping">Early Stopping</a></li>
+</ul>
+</li>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#models">Models</a></strong><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#logistic-regression">Logistic Regression</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#multiclass_classification">Multi-Class Classification (Softmax Regression)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#transfer_learning">Transfer Learning</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#multitask_learning">Multi-Task Learning</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#convolutional_neural_network">Convolutional Neural Network (CNN)</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#filter_kernel">Filter/Kernel</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#stride">Stride</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#padding">Padding (valid and same convolutions)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#a_convolutional_layer">A Convolutional Layer</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#1_1_convolution">1*1 Convolution</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#pooling_layer">Pooling Layer (Max and Average Pooling)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#lenet_5">LeNet-5</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#alexnet">AlexNet</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#vgg_16">VGG-16 </a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#resnet">ResNet (More Advanced and Powerful) </a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#inception_network">Inception Network </a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#object_detection">Object Detection </a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#classification_with_localisation">Classification with Localisation</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#landmark_detection">Landmark Detection</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#sliding_windows_detection_algorithm">Sliding Windows Detection Algorithm</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#region_proposal">Region Proposal (R-CNN)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#yolo_algorithm">YOLO Algorithm</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#bounding_box_predictions">Bounding Box Predictions (Basics of YOLO)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#intersection_over_union">Intersection Over Union</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#non_max_suppression">Non-max Suppression</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#anchor_boxes">Anchor Boxes</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#face_verification">Face Verification</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#one_shot_learning">One-Shot Learning (Learning a “similarity” function)</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#siamese_network">Siamese Network</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#triplet_loss">Triplet Loss</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#face_recognition_verification_and_binary_classification">Face Recognition/Verification and Binary Classification</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#neural_style_transfer">Neural Style Transfer </a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#1d_and_3d_generalisations">1D and 3D Convolution Generalisations </a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#sequence_models">Sequence Models</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#recurrent_neural_network">Recurrent Neural Network Model</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gated_recurrent_unit">Gated Recurrent Unit (GRU)</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gru_simplified">GRU (Simplified)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#gru_full">GRU (Full)</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#long_short_term_memory">Long Short Term Memory (LSTM)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#bidirectional_rnn">Bidirectional RNN</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#deep_rnn_example">Deep RNN Example</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#word_embedding">Word Embedding</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#one_hot">One-Hot</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#embedding_matrix">Embedding Matrix ($E$)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#learning_word_embedding">Learning Word Embedding</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#word2vec_and_skip_gram">Word2Vec &amp; Skip-gram</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#negative_sampling">Negative Sampling</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#glove_vector">GloVe Vector</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#elmo">Deep Contextualized Word Representations (ELMo, Embeddings from Language Models)</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#sequence_to_sequence_model_example">Sequence to Sequence Model Example: Translation</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#pick_the_most_likely_sentence">Pick the most likely sentence (Beam Search)</a><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#beam_search">Beam Search</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#length_normalisation">Length Normalisation</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#error_analysis_in_beam_search">Error Analysis in Beam Search (heuristic search algorithm)</a></li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#bleu_score">Bleu Score</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#combined_bleu">Combined Bleu</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#attention_model">Attention Model</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#transformer">Transformer (Attention Is All You Need)</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#bert">Bidirectional Encoder Representations from Transformers (BERT)</a></li>
+</ul>
+</li>
+<li><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tips">Practical Tips</a></strong><ul>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#train_dev_test">Train/Dev/Test Dataset</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#over_and_under_fitting">Over/UnderFitting, Bias/Variance, Comparing to Human-Level Performance, Solutions</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#mismatched_data_distribution">Mismatched Data Distribution</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#input_normalization">Input Normalization</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#single_number_model_evaluation_metric">Use a Single Number Model Evaluation Metric</a></li>
+<li><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#error_analysis">Error Analysis (Prioritize Next Steps)</a></li>
+</ul>
+</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<hr>
+<h3 id="Activation-Functions"><a href="#Activation-Functions" class="headerlink" title="Activation Functions"></a><a name="activation_functions"></a>Activation Functions</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Function</th>
+<th>Derivative</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sigmoid</td>
+<td>$g(z)=\frac{1}{1+e^{-z}}$</td>
+<td>$g(z)(1-g(z))$</td>
+</tr>
+<tr>
+<td>tanh</td>
+<td>$tanh(z)$</td>
+<td>$1-(tanh(z))^2$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>0, if $z&lt;0$</td>
+</tr>
+<tr>
+<td>Relu</td>
+<td>$max(0,z)$</td>
+<td>1, if $z&gt;0$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>undefined, if $z=0$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>0.01, if $z&lt;0$</td>
+</tr>
+<tr>
+<td>Leaky Relu</td>
+<td>$max(0.01z,z)$</td>
+<td>1, if $z&gt;0$</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td>undefined, if $z=0$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a><a name="gradient_descent"></a>Gradient Descent</h3><p>Gradient Descent is an iterative method to find the local minimum of an objective function (e.g. loss function).</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Repeat&#123;</div><div class="line">    W := W - learning_rate * dJ(W)/dW</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>The symbol $:=$ means the update operation. Obviously, we are updating the value of parameter $W$.</p>
+<p>Usually, we use $\alpha$ to represent the learning rate. It is one of the hyper parameters (we will introduce more hyper parameters in another section) when training a neural network. $J(W)$ is the loss function of our model. $\frac{dJ(W)}{dW}$ is the gradient of parameter $W$. If $W$ is a matrix of parameters(weights), $\frac{dJ(W)}{dW}$ would be a matrix of gradients of each parameter (i.e. $w_{ij}$).</p>
+<p><strong>Question:</strong> <strong>Why we minus the gradients not add them when minimizing the loss function?</strong><br>Answer:<br>For example, our loss function is $J(W)=0.1(W-5)^2$ and it may look like:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/gradient_descent_smaller.png" alt="gradient descent"><br>When $W=10$, the gradient $\frac{dJ(W)}{dW}=0.1*2(10-5)=1$. Obviously, if we are going to find the minimum of $J(W)$, the opposite direction of gradient (e.g. $-\frac{dJ(W)}{dW}$) is the correct direction to find the local lowest point (i.e. $J(W=5)=0$).</p>
+<p>But sometime, gradient descent methods may suffer local optima problem.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Computation-Graph"><a href="#Computation-Graph" class="headerlink" title="- Computation Graph"></a><a name="computation_graph"></a>- Computation Graph</h4><p>The computation graph example was learned from the first course of <a href="https://www.deeplearning.ai/" target="_blank" rel="external">Deep Learning AI</a>.<br>Let’s say we have 3 learnable parameters, $a$, $b$ and $c$. The cost function is $J=3(a+bc)$. Next, we need to compute the parameters’ gradient: $\frac{dJ}{da}$, $\frac{dJ}{db}$ and $\frac{dJ}{dc}$. We also define: $u=bc$, $v=a+u$ and $J=3v$. The computation could be converted into the computation graph below:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-1.png" alt="forward computation"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Backpropagation"><a href="#Backpropagation" class="headerlink" title="- Backpropagation"></a><a name="backpropagation"></a>- Backpropagation</h4><p>Based on the graph above, it is clear that the gradient of parameters are: $\frac{dJ}{da}=\frac{dJ}{dv}\frac{dv}{da}$, $\frac{dJ}{db}=\frac{dJ}{dv}\frac{dv}{du}\frac{du}{db}$, $\frac{dJ}{dc}=\frac{dJ}{dv}\frac{dv}{du}\frac{du}{dc}$.<br>Computing the gradients of each node is easy as shown below. (Tips: In fact, if you are implementing your own algorithm, the gradients could be computed during the forward process to save computation resources and training time. Therefore, when you do backpropagation, there is no need to compute the gradients of each node again.)<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-2.png" alt="gradient of each node"><br>Now we can compute the gradient of each parameters by simply combine the node gradients:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/computation_graph-3.png" alt="backpropagation"><br>$\frac{dJ}{da}=\frac{dJ}{dv}\frac{dv}{da}=3\times1=3$<br>$\frac{dJ}{db}=\frac{dJ}{dv}\frac{dv}{du}\frac{du}{db}=3\times1\times2=6$<br>$\frac{dJ}{dc}=\frac{dJ}{dv}\frac{dv}{du}\frac{du}{dc}=3\times1\times3=9$</p>
+<h4 id="Gradients-for-L2-Regularization-weight-decay"><a href="#Gradients-for-L2-Regularization-weight-decay" class="headerlink" title="- Gradients for L2 Regularization (weight decay)"></a><a name="gradients_for_l2_regularization"></a>- Gradients for L2 Regularization (weight decay)</h4><p>The gradients is changed a bit by adding $\frac{\lambda}{m}W$.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">Repeat&#123;</div><div class="line">    W := W - (lambda/m) * W - learning_rate * dJ(W)/dW</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Vanishing-Exploding-Gradients"><a href="#Vanishing-Exploding-Gradients" class="headerlink" title="- Vanishing/Exploding Gradients"></a><a name="vanishing_exploding_gradients"></a>- Vanishing/Exploding Gradients</h4><p>If we have a very deep neural network and we did not initialize weight properly, we may suffer gradients vanishing or exploding problems. (More details about parameter initialization: <a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#parameters_initialization">Parameters Initialization</a>)</p>
+<p>In order to explain what is the vanishing or exploding gradients problems, a simple but deep neural network architecture will be taken as an example. (Again, the great example is from the online course <a href="https://www.deeplearning.ai/" target="_blank" rel="external">Deep Learning AI</a>)</p>
+<p>The neural network has $L$ layers. For simplicity, the parameter $b^{[l]}$ for each layer is 0 and all the activation functions are $g(z)=z$. In addition, every parameter $W^{[l]}$ has the same values.</p>
+<script type="math/tex; mode=display">
+W^{[l]}=\left(\begin{array}{cc}
+1.5 & 0\\
+0 & 1.5
+\end{array}\right)</script><p>Based on the simple model above, the final output would be:<br>$y=W^{[l]}W^{[l-1]}W^{[l-2]}…W^{[3]}W^{[2]}W^{[1]}X$</p>
+<p>Because the weight value $1.5&gt;1$, we will get $1.5^L$ in some elements which is explosive. Similarly, if the weight value less than 1.0 (e.g. 0.5), there are some vanishing gradients (e.g. $0.5^L$) somewhere.</p>
+<p><strong>These vanishing/exploding gradients will make training very hard. So carefully initializing weights for deep neural networks is important.</strong></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Mini-Batch-Gradient-Descent"><a href="#Mini-Batch-Gradient-Descent" class="headerlink" title="- Mini-Batch Gradient Descent"></a><a name="mini_batch_gradient_descent"></a>- Mini-Batch Gradient Descent</h4><p>If we have a huge training dataset, it will take a long time that training a model on a single epoch. It would be hard for us to track the training process. In the mini-batch gradient descent, the cost and gradients are computed based on the training examples in current batch.</p>
+<p>$X$ represents the whole train set and it is divided into several batches as shown below. $m$ is the number of training examples.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mini-batch.png" alt="mini-batches of training data X"></p>
+<p>The procedure of mini-batches is as follows:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">For t= (1, ... , #Batches):</div><div class="line">  Do forward propagation on the t-th batch examples;</div><div class="line">  Compute the cost on the t-th batch examples;</div><div class="line">  Do backward propagation on the t-th batch examples to compute gradients and update parameters.</div></pre></td></tr></table></figure></p>
+<p>During the training process, the cost trend is smoother when we do not apply mini-batch gradient descent than that of using mini-batches to train our model.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mini_batch_loss.png" alt="cost trend of batch and mini-batch gradient Descent"></p>
+<h4 id="Stochastic-Gradient-Descent"><a href="#Stochastic-Gradient-Descent" class="headerlink" title="- Stochastic Gradient Descent"></a><a name="stochastic_gradient_descent"></a>- Stochastic Gradient Descent</h4><p>When the batch size is 1, it is called Stochastic gradient descent.</p>
+<h4 id="Choosing-Mini-Batch-Size"><a href="#Choosing-Mini-Batch-Size" class="headerlink" title="- Choosing Mini-Batch Size"></a><a name="choosing_mini_batch_size"></a>- Choosing Mini-Batch Size</h4><p>Mini-Batch Size:<br>1) if the size is $M$, the number of examples in the whole train set, the gradient descent is exactly Batch Gradient Descent.<br>2) if the size is 1, it is called Stochastic Gradient Descent.</p>
+<p>In practice, the size is selected somewhere between 1 and M. When $M &lt;= 2000$, the dataset is supposed to be a small dataset, using Batch Gradient Descent is acceptable. When $M &gt; 2000$, probably Mini-Batch Gradient Descent is a better way to train our model. Typically the mini-batch size could be 64, 128, 256, etc.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mini_batch_gradient.png" alt="training process with various batch sizes"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Gradient-Descent-with-Momentum-always-faster-than-SGD"><a href="#Gradient-Descent-with-Momentum-always-faster-than-SGD" class="headerlink" title="- Gradient Descent with Momentum (always faster than SGD)"></a><a name="gradient_descent_with_momentum"></a>- Gradient Descent with Momentum (always faster than SGD)</h4><p>On each mini-batch iteration $t$:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Compute $dW$, $db$ on the current mini-batch<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) $V_{dW}=\beta V_{dW}+(1-\beta)dW$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) $V_{db}=\beta V_{db}+(1-\beta)db$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) $W:=W-\alpha V_{dW}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) $b:=b-\alpha V_{db}$</p>
+<p>The hyper parameters in momentum are $\alpha$(learning rate) and $\beta$. In momentum, $V_{dW}$ is the information of the previous gradients history. If we set $\beta=0.9$, it means we want to take the around last 10 iterations’ gradients into consideration to update parameters.</p>
+<p>The original $\beta$ is from the parameter of <a href="https://www.youtube.com/watch?v=NxTFlzBjS-4" target="_blank" rel="external">exponentially weighted averages</a>. E.g. $\beta=0.9$ means we want to take around the last 10 values to compute average. $\beta=0.999$ means considering around the last 1000 values etc.</p>
+<h4 id="Gradient-Descent-with-RMSprop"><a href="#Gradient-Descent-with-RMSprop" class="headerlink" title="- Gradient Descent with RMSprop"></a><a name="gradient_descent_with_rmsprop"></a>- Gradient Descent with RMSprop</h4><p>On each mini-batch iteration $t$:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Compute $dW$, $db$ on the current mini-batch<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) $S_{dW}=\beta S_{dW}+(1-\beta)(dW)^2$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) $S_{db}=\beta S_{db}+(1-\beta)(db)^2$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) $W:=W -\alpha \frac{dW}{\sqrt{S_{dW}}+\epsilon}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) $b:=b-\alpha \frac{db}{\sqrt{S_{db}}+\epsilon}$</p>
+<h4 id="Adam-put-Momentum-and-RMSprop-together"><a href="#Adam-put-Momentum-and-RMSprop-together" class="headerlink" title="- Adam (put Momentum and RMSprop together)"></a><a name="adam"></a>- Adam (put Momentum and RMSprop together)</h4><p>$V_{dW}=0$,$S_{dW}=0$,$V_{db}=0$,$S_{db}=0$<br>On each mini-batch iteration $t$:<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1) Compute $dW$, $db$ on the current mini-batch<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Momentum<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) $V_{dW}=\beta_1 V_{dW}+(1-\beta_1)dW$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) $V_{db}=\beta_1 V_{db}+(1-\beta_1)db$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// RMSprop<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) $S_{dW}=\beta_2 S_{dW}+(1-\beta_2)(dW)^2$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) $S_{db}=\beta_2 S_{db}+(1-\beta_2)(db)^2$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Bias Correction<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6) $V_{dW}^{correct}=\frac{V_{dW}}{1-\beta_1^t}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7) $V_{db}^{correct}=\frac{V_{db}}{1-\beta_1^t}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6) $S_{dW}^{correct}=\frac{S_{dW}}{1-\beta_2^t}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7) $S_{db}^{correct}=\frac{S_{db}}{1-\beta_2^t}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;// Update Parameters<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$W:=W -\alpha \frac{V_{dW}^{correct}}{\sqrt{S_{dW}^{correct}}+\epsilon}$<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$b:=b-\alpha \frac{V_{db}^{correct}}{\sqrt{S_{db}^{correct}}+\epsilon}$</p>
+<p>The “correct” is the concept of <a href="https://www.youtube.com/watch?v=lWzo8CajF5s" target="_blank" rel="external">“Bia Correction”</a> from exponentially weighted average. The correction could make the computation of averages more accurately. $t$ is the power of $\beta$.</p>
+<p>Usually, the default hyper parameter values are: $\beta_1=0.9$, $\beta_2=0.99$ and $\epsilon=10^{-8}$.</p>
+<p>Learning rate $\alpha$ needs to be tune. Alternatively, applying learning rate decay methods could also work well.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Learning-Rate-Decay-Methods"><a href="#Learning-Rate-Decay-Methods" class="headerlink" title="- Learning Rate Decay Methods"></a><a name="learning_rate_decay_methods"></a>- Learning Rate Decay Methods</h4><p>If the learning rate is fixed during train phrase, the loss/cost may fluctuate as shown in the picture below. Find way to make the learning rate adaptive could be a good idea.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_rate_decay_methods.png" alt="training with fix learning rate"></p>
+<h5 id="Decay-based-on-the-number-of-epoch"><a href="#Decay-based-on-the-number-of-epoch" class="headerlink" title="Decay based on the number of epoch"></a><em>Decay based on the number of epoch</em></h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_rate_decay_methods_epoch.png" alt="train phrase"><br>Decreasing learning rate according to the number of epoch is a straightforward way. The following is the rate decay equation.</p>
+<script type="math/tex; mode=display">\alpha=\frac{1}{1+DecayRate*EpochNumber}\alpha_0</script><p>For example, the initial $\alpha=0.2$ and decay rate is 1.0. The learning rates of each epoch are:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Epoch</th>
+<th>$\alpha$</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>0.1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>0.67</td>
+</tr>
+<tr>
+<td>3</td>
+<td>0.5</td>
+</tr>
+<tr>
+<td>4</td>
+<td>0.4</td>
+</tr>
+<tr>
+<td>5</td>
+<td>…</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Of course, there are also some other learning rate decay methods.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Other Methods</th>
+<th>Equation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>exponentially decay</td>
+<td>$\alpha=0.95^{EpochNumber}\alpha_0$</td>
+</tr>
+<tr>
+<td>epoch number related</td>
+<td>$\alpha=\frac{k}{EpochNumber}\alpha_0$</td>
+</tr>
+<tr>
+<td>mini-batch number related</td>
+<td>$\alpha=\frac{k}{t}\alpha_0$</td>
+</tr>
+<tr>
+<td>discrete stair case</td>
+<td><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/discrete_stair_case.png" alt=""></td>
+</tr>
+<tr>
+<td>manual decay</td>
+<td>decrease learning rate manually day by day or hour by hour etc.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Batch-Normalization"><a href="#Batch-Normalization" class="headerlink" title="- Batch Normalization"></a><a name="batch_normalization"></a>- Batch Normalization</h4><h5 id="Batch-Normalization-at-Train-Time"><a href="#Batch-Normalization-at-Train-Time" class="headerlink" title="Batch Normalization at Train Time"></a><em>Batch Normalization at Train Time</em></h5><p>Using batch normalization could speed up training.</p>
+<p>The procedure is as follows.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/batch_normalization.png" alt="Batch Normalization"></p>
+<p>The details of batch normalization in each layer $l$ is:</p>
+<p>$\mu=\frac{1}{m}\sum Z^{(i)}$<br>$\delta^2=\frac{1}{m}\sum (Z^{(i)}-\mu)$<br>$Z^{(i)}_{normalized}=\alpha \frac{Z^{(i)}\mu}{\sqrt{\delta^2}+\epsilon} +\beta$</p>
+<p>$\alpha$ and $\beta$ are learnable parameters here.</p>
+<h5 id="Batch-Normalization-at-Test-Time"><a href="#Batch-Normalization-at-Test-Time" class="headerlink" title="Batch Normalization at Test Time"></a><em>Batch Normalization at Test Time</em></h5><p>At test time, we do not have the instances to compute $\mu$<br> and $\delta$, because probably we only have one test instance at each time.</p>
+<p> In this situation, it is a good idea that estimating  reasonable values of $\mu$ and $delta$ by using exponentially weighted average across mini-batches.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Paramters"><a href="#Paramters" class="headerlink" title="Paramters"></a><a name="parameters"></a>Paramters</h3><h4 id="Learnable-and-Hyper-Parameters"><a href="#Learnable-and-Hyper-Parameters" class="headerlink" title="- Learnable and Hyper Parameters"></a><a name="learnable_and_hyper_parameters"></a>- Learnable and Hyper Parameters</h4><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Learnable Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$W, b$</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Hyper Parameters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>learning rate $\alpha$</td>
+</tr>
+<tr>
+<td>the number of iterations</td>
+</tr>
+<tr>
+<td>the number of hidden layers $L$</td>
+</tr>
+<tr>
+<td>the number of hidden units of each layer</td>
+</tr>
+<tr>
+<td>choice of activation function</td>
+</tr>
+<tr>
+<td>parameters of Momentum</td>
+</tr>
+<tr>
+<td>mini batch size</td>
+</tr>
+<tr>
+<td>parameters of regularization</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Parameters-Initialization"><a href="#Parameters-Initialization" class="headerlink" title="- Parameters Initialization"></a><a name="parameters_initialization"></a>- Parameters Initialization</h4><p>(<strong>Note:</strong> Actually, the machine learning frameworks (e.g. tensorflow, chainer etc.) have already provided robust parameter initialization functions.)</p>
+<h5 id="Small-Initial-Values"><a href="#Small-Initial-Values" class="headerlink" title="Small Initial Values"></a><em>Small Initial Values</em></h5><p>For example, when we initialize the parameter $W$, we time a small value (i.e. 0.01) to ensure the initial parameters are small:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">W = numpy.random.randn(shape) * 0.01</div></pre></td></tr></table></figure></p>
+<p>The reason for doing this is, if you are using sigmoid function and your initial parameters are large, the gradients would be very small.</p>
+<h5 id="More-Hidden-Units-Smaller-Weights"><a href="#More-Hidden-Units-Smaller-Weights" class="headerlink" title="More Hidden Units, Smaller Weights"></a><em>More Hidden Units, Smaller Weights</em></h5><p>Similarly, we will use pseudo-code to show how various initialization methods work. The idea is we prefer to assign smaller values to parameters to prevent the training phrase from vanishing or exploding gradients, if the number of hidden units is larger. The figure below may provide you some insights to understand the idea.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/weight_init.png" alt="z"></p>
+<p>Based on the abovementioned idea, we could time the weights with a term related to the number of hidden units.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">W = numpy.random.randn(shape) * numpy.sqrt(1/n[l-1])</div></pre></td></tr></table></figure>
+<p>The equation of the multiplied term is $\sqrt{\frac{1}{n^{[l-1]}}}$. $n^{[l-1]}$ is the number of hidden units in the previous layer.</p>
+<p>If you are using Relu activation function, using the term $\sqrt{\frac{2}{n^{[l-1]}}}$ could work better.</p>
+<h5 id="Xavier-Initialization"><a href="#Xavier-Initialization" class="headerlink" title="Xavier Initialization"></a><em>Xavier Initialization</em></h5><p>If your activation function is $\tanh$, Xavier initialization ( $\sqrt{\frac{1}{n^{[l-1]}}}$ or $\sqrt{\frac{2}{n^{[l-1]} + n^{[l]}}}$) would be a good choice.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Hyper-Parameter-Tuning"><a href="#Hyper-Parameter-Tuning" class="headerlink" title="- Hyper Parameter Tuning"></a><a name="hyper_parameter_tuning"></a>- Hyper Parameter Tuning</h4><p>When tuning hyper parameters, it is necessary to try various possible values. If the computation resources are sufficient, the most simple way is training models with various parameter values parallel. However, most likely, the resources are very rare. In this case, we can just take care of only one model and try different values in different period.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning.png" alt="Babysitting one model vs. Traning models parallel"></p>
+<p>Apart from the abovementioned aspect, how to select the hyper parameter value wisely is also very important.</p>
+<p>As you know, there are various hyper parameters in a neural network architecture: learning rate $\alpha$, Momentum and RMSprop parameters ($\beta_1$, $\beta_2$ and $\epsilon$), the number of layers, the number of units of each layer, learning rate decay parameters and mini-batch size.</p>
+<p>The following priorities of hyper parameters were recommend by Andrew Ng:</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Hyper Parameter</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>learning rate $\alpha$</td>
+</tr>
+<tr>
+<td>2</td>
+<td>$\beta_1$, $\beta_2$ and $\epsilon$ (parameters of momentum and RMSprop)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>the number of hidden units</td>
+</tr>
+<tr>
+<td>2</td>
+<td>mini-batch size</td>
+</tr>
+<tr>
+<td>3</td>
+<td>the number of layers</td>
+</tr>
+<tr>
+<td>3</td>
+<td>the number of learning rate decay</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>(usually, the default values of momentum and RMSprop are: $\beta_1=0.9$, $\beta_2=0.99$ and $\epsilon=10^{-8}$)</p>
+<h5 id="Uniform-sample-for-hidden-units-and-layers"><a href="#Uniform-sample-for-hidden-units-and-layers" class="headerlink" title="Uniform sample for hidden units and layers"></a><em>Uniform sample for hidden units and layers</em></h5><p>For example, if the range of layer numbers is 2-6, we can uniformly try to use 2, 3, 4, 5, 6 to train a model. Similarly, for the hidden units range 50-100, picking values in this scale is a good strategy.</p>
+<p>Example:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning_units_and_layers.png" alt="hidden units and layers"></p>
+<h5 id="Sample-on-log-scale"><a href="#Sample-on-log-scale" class="headerlink" title="Sample on log scale"></a><em>Sample on log scale</em></h5><p>You may have already realized that uniform sample is not usually a good idea for all kinds parameters.</p>
+<p>For instance, let us say an appropriate scale of learning rate $\alpha$ is $[0.0001,1]=[10^{-4},10^{0}]$. Obviously, picking values uniformly is unwise. A much better method is sampling on the log scale, $\alpha=10^r, r\in [-4,0]$ ($0.0001$, $0.001$, $0.01$, $0.1$ and $1$).</p>
+<p>As for the parameter $\beta_1$ and $\beta_2$, we could use the similar strategy.</p>
+<p>For example,<br>$1-\beta=10^r$<br>Therefore, $\beta=1-10^r$<br>$r\in [-3, -1]$</p>
+<p>The table below could be helpful for you to understand the strategy better.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$\beta$</td>
+<td>0.9</td>
+<td>0.99</td>
+<td>0.999</td>
+</tr>
+<tr>
+<td>$1-\beta$</td>
+<td>0.1</td>
+<td>0.01</td>
+<td>0.001</td>
+</tr>
+<tr>
+<td>$r$</td>
+<td>-1</td>
+<td>-2</td>
+<td>-3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Example:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/hyper_parameter_tuning_alpha_and_beta.png" alt="learning rate alpha and beta"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a><a name="regularization"></a>Regularization</h3><p>Regularization is a way to prevent overfitting problem in machine learning. An additional regularization term would be added to the loss function.</p>
+<h4 id="L2-Regularization-weight-decay"><a href="#L2-Regularization-weight-decay" class="headerlink" title="- L2 Regularization (weight decay)"></a><a name="l2_regularization"></a>- L2 Regularization (weight decay)</h4><p>$\min J(W,b)=\frac{1}{m}\sum_{i=1}^mL(\hat{y}^i,y^i)+\frac{\lambda}{2m}||W||_2^2$</p>
+<p>In the new loss function, $\frac{\lambda}{2m}||W||_2^2$ is the regularization term and $\lambda$ is the regularization parameter (a hyper parameter). L2 regularization is also called weight decay.</p>
+<p>For the logistic regression model, $W$ is a vector (i.e. the dimension of $W$ is the same as the feature vector), the regularization term would be:</p>
+<p>$||W||_{2}^2=\sum_{j=1}^{dimension}W_{j}^2$.</p>
+<p>For a neural network model which has multiple layers (e.g. $L$ layers), there are multiple parameter matrixes between layers. The shape of each matrix $W$ is $(n^{[l]}, n^{[l-1]})$. In the equation, $l$ is the $l^{th}$ layer and $n^{[l]}$ is the number of hidden units in layer $l$. Therefore, the L2 regularization term would be:</p>
+<p>$\frac{\lambda}{2m}\sum_{l=1}^L||W^l||_2^2$</p>
+<p>$||W^l||_{2}^2=\sum_{i=1}^{n^{[l-1]}}\sum_{j=1}^{n^{[l]}}(W_{ij}^l)^2$ (also called Frobenius norm).</p>
+<h4 id="L1-Regularization"><a href="#L1-Regularization" class="headerlink" title="- L1 Regularization"></a><a name="l1_regularization"></a>- L1 Regularization</h4><p>$\min J(W,b)=\frac{1}{m}\sum_{i=1}^mL(\hat{y}^i,y^i)+\frac{\lambda}{2m}||W^l||$</p>
+<p>$||W^l||=\sum_{i=1}^{n^{[l-1]}}\sum_{j=1}^{n^{[l]}}W_{ij}^l$.</p>
+<p>If we use L1 regularization, the parameters $W$ would be sparse.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Dropout-inverted-dropout"><a href="#Dropout-inverted-dropout" class="headerlink" title="- Dropout (inverted dropout)"></a><a name="dropout"></a>- Dropout (inverted dropout)</h4><p>To understand dropout intuitively, dropout regularization aims to make the supervised model more robust. In the training phrase, some output values of activation functions will be ignored. Therefore, when making predictions, the model will not rely on any one feature.</p>
+<p>In dropout regularization, the hyper parameter “keep probability” describes the chance to active a hidden unit. Therefore, if a hidden layer has $n$ units and the probability is $p$, around $p \times n$ units will be activated and around $(1-p)\times n$ units will be shut off.</p>
+<p><strong>Example:</strong><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/dropout.png" alt="dropout example"></p>
+<p>As shown above, 2 units of 2nd layer are dropped. Therefore, the value of linear combination of 3rd layer (i.e. $z^{[3]=}W^{[3]}a^{[2]}+b^{[3]}$) will decrease. In order not to reduce the expect value of $z$, we should adjust the value of $a^{[2]}$ by dividing the keep probability. That is: $a^{[2]} := \frac{a^{[2]}}{p}$</p>
+<p><strong>!Note:</strong> When making predictions at test time, there is <strong>NO NEED</strong> to use dropout regularization.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Early-Stopping"><a href="#Early-Stopping" class="headerlink" title="- Early Stopping"></a><a name="early_stopping"></a>- Early Stopping</h4><p>Using early stopping to prevent the model from overfitting.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/early_stopping.png" alt="early stopping"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Models"><a href="#Models" class="headerlink" title="Models"></a><a name="models"></a>Models</h3><h4 id="Logistic-Regression"><a href="#Logistic-Regression" class="headerlink" title="- Logistic Regression"></a><a name="logistic-regression"></a>- Logistic Regression</h4><p>Given the feature vector of an instance $x$, the output of logistic regression model is $p(y=1|x)$. Therefore, the probability $p(y=0|x)=1-p(y=1|x)$. In a logistic regression, the learnable parameters are $W$ and $b$.</p>
+<script type="math/tex; mode=display">
+p(y=1|x)=\sigma(W^Tx+b)=(1+e^{-W^Tx-b})^{-1}</script><p>The x-axis is the value of $W^Tx+b$ and y-axis is $p(y=1|x)$. (The picture is download from <a href="https://en.wikipedia.org/wiki/Sigmoid_function" target="_blank" rel="external">wikipedia</a>)<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sigmoid.png" alt="logistic curve"><br><strong>Loss function</strong> for one training instance $(x^i,y^i)$:</p>
+<script type="math/tex; mode=display">
+L(\hat{y}^i,y^i)=-[y^i\log{\hat{y}^i} + (1-y^i)\log{(1-\hat{y}^i)}]</script><p>$\hat{y}^i$ is the prediction and $y^i$ is true answer.<br><strong>Cost Function</strong> for the whole train dataset ($m$ is the number of examples in the training dataset):</p>
+<script type="math/tex; mode=display">J(W,b)=\frac{1}{m}\sum_{i=1}^{m}L(\hat{y}^i,y^i)</script><p><strong>Minimizing the cost function is actually maximizing the likelihood of data.</strong><br>$LogLikelihood=\sum_{i=1}^{m}logP(y^i|x^i)=\sum_{i=1}^{m}log(\hat{y}^y(1-\hat{y})^{1-y})=-\sum_{i=1}^{m}L(\hat{y}^i,y^i)$</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Multi-Class-Classification-Softmax-Regression"><a href="#Multi-Class-Classification-Softmax-Regression" class="headerlink" title="- Multi-Class Classification (Softmax Regression)"></a><a name="multiclass_classification"></a>- Multi-Class Classification (Softmax Regression)</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/softmax_regression.png" alt="Softmax Regression"><br>The softmax regression generalizes logistic regression (binary classification) to multiple classes (multi-class classification).</p>
+<p>As shown in the figure above, it is a 3-class classification neural network. In the last layer, a softmax activation function is used. The outputs are the probabilities of each class.</p>
+<p>The softmax activation is as follows.<br>1) $z^{[L]}=[z^{[L]}_0, z^{[L]}_1, z^{[L]}_2]$</p>
+<p>2) $a^{[L]}=[\frac{e^{z^{[L]}_0}}{e^{z^{[L]}_0}+ e^{z^{[L]}_1}+e^{z^{[L]}_2}}, \frac{e^{z^{[L]}_1}}{e^{z^{[L]}_0}+e^{z^{[L]}_1}+ e^{z^{[L]}_2}}, \frac{e^{z^{[L]}_2}}{e^{z^{[L]}_0}+ e^{z^{[L]}_1}+e^{z^{[L]}_2}}]$<br>$=[p(class=0|x),p(class=1|x),p(class=2|x)]$<br>$=[y_0,y_1,y_2]$</p>
+<h5 id="Loss-Function"><a href="#Loss-Function" class="headerlink" title="Loss Function"></a><em>Loss Function</em></h5><p>$LossFunction=\frac{1}{m}\sum_{i=1}^{m}L(\hat{y^i},y^i)$<br>$L(\hat{y},y)=-\sum_j^{3}y_j^i\log\hat{y_j^i}$</p>
+<p>$m$ is the number of train instances. $j$ is the j-th class.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Transfer-Learning"><a href="#Transfer-Learning" class="headerlink" title="- Transfer Learning"></a><a name="transfer_learning"></a>- Transfer Learning</h4><p>If we have a large amount of training data or our neural network is very big, it is time-consuming (e.g. a few days or weeks) for us to train such a model. Fortunately, there are some models released and available publicly. Usually, these models were trained on huge amount of data.</p>
+<p>The idea of transfer learning is we can download these pre-trained models and adjust their models to our own problem as shown below.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/transfer_learning.png" alt="transfer learning"></p>
+<p>If we have a lot of data, we can re-train the whole neural network. On the other hand, if we have a small train set, we can retrain the last or last few layers (e.g. the last two layers).</p>
+<p><strong>In which situation we can use transfer learning?</strong><br>Assume:<br>the pre-trained model is for task A and our own model is for task B.</p>
+<ul>
+<li>The two tasks should have the same input format</li>
+<li>For task A, we have a lot of training data. But for task B, the size of data size is much smaller</li>
+<li>The low level features learnt from task A could be helpful for training the model for task B.</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Multi-Task-Learning"><a href="#Multi-Task-Learning" class="headerlink" title="- Multi-Task Learning"></a><a name="multitask_learning"></a>- Multi-Task Learning</h4><p>In a classification task, usually each instance only have one correct label as show below. The i-th instance only corresponds to the second class.</p>
+<script type="math/tex; mode=display">
+y^{(i)} =
+\begin{pmatrix}
+
+0\\
+1\\
+0\\
+0\\
+0
+
+\end{pmatrix}</script><p>However, in a multitask learning, one instance may have multiple labels.</p>
+<script type="math/tex; mode=display">
+y^{(i)} =
+\begin{pmatrix}
+
+0\\
+1\\
+1\\
+1\\
+0
+
+\end{pmatrix}</script><p>In the task, the loss function is:<br>$LossFunction=\frac{1}{m}\sum_{i=1}^{m}\sum_{j=1}^5 L(\hat{y^i_j},y^i_j)$<br>$L(\hat{y_j^i},y_j^i)=-y_j^i\log \hat{y_j}-(1-y_j^i)\log (1-y_j^i)$</p>
+<p>$m$ is the number of train instances. $j$ is the j-th class.</p>
+<p><strong>Tips for multi-task learning:</strong></p>
+<ul>
+<li>The multi-tasks learning model may share lower-level features</li>
+<li>we may can try a big enough neural network to work well on all the tasks</li>
+<li>In the train set, the amount of instances of each task is similar</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Convolutional-Neural-Network-CNN"><a href="#Convolutional-Neural-Network-CNN" class="headerlink" title="- Convolutional Neural Network (CNN)"></a><a name="convolutional_neural_network"></a>- Convolutional Neural Network (CNN)</h4><h5 id="Filter-Kernel"><a href="#Filter-Kernel" class="headerlink" title=" Filter/Kernel"></a><a name="filter_kernel"></a> Filter/Kernel</h5><p>For example, we have a $3*3$ filter (also called kernel) and the picture below describes how a filter/kernel works on a 2D input. The size of the input $x$ is $6*6$ and the size of the output when applying the filter/kernel is $4*4$.</p>
+<p>The parameters (e.g. $w_1, w_2, …$) in filters/kernels are learnable.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_2d.png" alt="CNN on 2D data"></p>
+<p>What is more, we can have multiple filters at the same time as shown below.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_2d_2_filters.png" alt="CNN on 2D data with 2 filters"></p>
+<p>Similarly, if the input is a volume which has 3 dimensions, we can also have a 3D filter. In this filter, there are 27 learnable parameters.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_on_3d_2_filters.png" alt="CNN on 3D data"></p>
+<p>Usually, the width of filter is odd (e.g. $1*1$, $3*3$, $5*5$, …)</p>
+<p>The idea of filter is if it is useful in one part of the input, probably it is also useful for another part of the input. Moreover, each output value of a convolutional layer output values only depends on a small number of inputs.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Stride"><a href="#Stride" class="headerlink" title="- Stride"></a><a name="stride"></a>- Stride</h4><p>Stride describes the step size of filter. It will affect the output size.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_stride.png" alt="stride"></p>
+<p>It should be noticed that some input elements are ignored. This problem can be solved by padding.<br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Padding-valid-and-same-convolutions"><a href="#Padding-valid-and-same-convolutions" class="headerlink" title="- Padding (valid and same convolutions)"></a><a name="padding"></a>- Padding (valid and same convolutions)</h4><p>As describe above, valid convolution is the convolution when we do not use padding.</p>
+<p>Same convolution is we can use padding to extend the original input by filling zeros so that the output size is the same as the input size.</p>
+<p>For example, the input size is $6*6$, and the filter is $3*3$. If we set stride=1 and padding=1, we can get the output with the same size as input.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn_padding.png" alt="padding"></p>
+<p>Generally, if the filter size is f*f, the input is n*n, stride=s, then the final output size is:<br>$(\lfloor \frac{n+2p-f}{s} \rfloor+1) \times (\lfloor \frac{n+2p-f}{s} \rfloor+1)$</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="A-Convolutional-Layer"><a href="#A-Convolutional-Layer" class="headerlink" title="- A Convolutional Layer"></a><a name="a_convolutional_layer"></a>- A Convolutional Layer</h4><p>In fact, we also apply activation functions on a convolutional layer such as the Relu activation function.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_1_convolutional_layer.png" alt="one convolutional layer with relu activation functions"></p>
+<p>As for the number of parameters, for a filter, there are 27(parameters of filter) +1 (bias) =28 parameters totally.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="1-1-Convolution"><a href="#1-1-Convolution" class="headerlink" title="- 1*1 Convolution"></a><a name="1_1_convolution"></a>- 1*1 Convolution</h4><p>The problem of computational cost if we do not use 1X1 conv layer:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/1_1_conv_1.png" alt="when not use 1*1 CONV"><br>The number of parameter is reduced dramatically using 1X1 conv layer:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/1_1_conv_2.png" alt="when use 1*1 CONV"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Pooling-Layer-Max-and-Average-Pooling"><a href="#Pooling-Layer-Max-and-Average-Pooling" class="headerlink" title="- Pooling Layer (Max and Average Pooling)"></a><a name="pooling_layer"></a>- Pooling Layer (Max and Average Pooling)</h4><p>The pooling layer (e.g. max pooling or average pooling layer) could be considered as a special kind filter.</p>
+<p>The max pooling layer returns the maximum number of the area which the filter currently covers. Similarly, the average pooling layers returns the average value of all the numbers in that area.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_pooling_layer.png" alt="max and average pooling layer"></p>
+<p>In the picture, $f$ is the filter width and $s$ is the value of stride.</p>
+<p><strong>Note: In a pooling layer, there is no learnable parameter.</strong></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="LeNet-5"><a href="#LeNet-5" class="headerlink" title="- LeNet-5"></a><a name="lenet_5"></a>- LeNet-5</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_lenet_5.png" alt="LeNet-5"><br>(around 60k parameters in the model)</p>
+<h4 id="AlexNet"><a href="#AlexNet" class="headerlink" title="- AlexNet"></a><a name="alexnet"></a>- AlexNet</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_alexnet.png" alt="AlexNet"><br>(around 60m parameters in the model; Relu activation function was used;)</p>
+<h4 id="VGG-16"><a href="#VGG-16" class="headerlink" title="- VGG-16"></a><a name="vgg_16"></a>- VGG-16</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/cnn2_vgg_16.png" alt="VGG-16"><br>(around 138m parameters in the model; all the filters $f=3$, $s=1$ and using same padding; in the max pooling layer, $f=2$ and $s=2$)<br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="ResNet-More-Advanced-and-Powerful"><a href="#ResNet-More-Advanced-and-Powerful" class="headerlink" title="- ResNet (More Advanced and Powerful)"></a><a name="resnet"></a>- ResNet (More Advanced and Powerful)</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/resnet.png" alt="ResNet"></p>
+<p>$a^{[l+2]}=g(z^{[l+2]} + a^{[l]})$</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Inception-Network"><a href="#Inception-Network" class="headerlink" title="- Inception Network"></a><a name="inception_network"></a>- Inception Network</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/inception_network.png" alt="Inception Network"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Object-Detection"><a href="#Object-Detection" class="headerlink" title="- Object Detection"></a><a name="object_detection"></a>- Object Detection</h4><h5 id="Classification-with-Localisation"><a href="#Classification-with-Localisation" class="headerlink" title="- Classification with Localisation"></a><a name="classification_with_localisation"></a>- Classification with Localisation</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation.png" alt="Classification with Localisation"></p>
+<p><strong>Loss Function</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation_1.png" alt="Classification with Localisation Loss Function"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Landmark-Detection"><a href="#Landmark-Detection" class="headerlink" title="- Landmark Detection"></a><a name="landmark_detection"></a>- Landmark Detection</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/classification_with_localisation_2.png" alt="Landmark Detection"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Sliding-Windows-Detection-Algorithm"><a href="#Sliding-Windows-Detection-Algorithm" class="headerlink" title="- Sliding Windows Detection Algorithm"></a><a name="sliding_windows_detection_algorithm"></a>- Sliding Windows Detection Algorithm</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows.png" alt="Classifier"></p>
+<p>Firstly, using a training set to train a classifier. Then apply it to the target picture step by step:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_1.png" alt="Classifier"></p>
+<p>The problem is the computation cost (compute sequencently). In order to address this issue, we can use the convolutional implementation of sliding windows (i.e. turning the last fully connected layers into convolutional layers).</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_2.png" alt="Classifier (Convolutional Implementation)"></p>
+<p>Using the convolutional implementation, we do not need to compute the results sequencently. Now we can compute the result once.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sliding_windows_3.png" alt="Using Convolutional Implementation"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Region-Proposal-R-CNN-only-run-detection-on-a-few-windows"><a href="#Region-Proposal-R-CNN-only-run-detection-on-a-few-windows" class="headerlink" title="- Region Proposal (R-CNN, only run detection on a few windows)"></a><a name="region_proposal"></a>- Region Proposal (R-CNN, only run detection on a few windows)</h5><p>In fact, in some pictures, there are only a few windows have the objects which we are interested in. In the region proposal (R-CNN) method, we only run the classifier on proposed regions.</p>
+<p><strong>R-CNN</strong>:</p>
+<ul>
+<li>use some algorithms to propose regions</li>
+<li>classify these proposed regions once at a times</li>
+<li>predict labels and the bounding boxes</li>
+</ul>
+<p><strong>Fast-R-CNN</strong>:</p>
+<ul>
+<li>use clustering methods to propose regions</li>
+<li>use convolution implementation of sliding windows to classify the proposed regions</li>
+<li>predict labels and bounding boxes</li>
+</ul>
+<p>An other faster R-CNN is using convolutional network to propose regions.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="YOLO-Algorithm"><a href="#YOLO-Algorithm" class="headerlink" title="- YOLO Algorithm"></a><a name="yolo_algorithm"></a>- YOLO Algorithm</h5><h6 id="Bounding-Box-Predictions-Basics-of-YOLO"><a href="#Bounding-Box-Predictions-Basics-of-YOLO" class="headerlink" title="- Bounding Box Predictions (Basics of YOLO)"></a><a name="bounding_box_predictions"></a>- Bounding Box Predictions (Basics of YOLO)</h6><p>Each picture is divided into cells.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_1.png" alt="Label for Training"></p>
+<p>For each cell:</p>
+<ul>
+<li>$p_c$ denotes whether is there a object in the cell</li>
+<li>$b_x$ and $b_y$ is the mid point (between 0 and 1)</li>
+<li>$b_h$ and $b_w$ is the relative height and weight (the value could be greater than 1.0).</li>
+<li>$c_1$, $c_2$ and $c_3$ denote which class is the object belongs to.</li>
+</ul>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_2.png" alt="Details of the Label"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Intersection-Over-Union"><a href="#Intersection-Over-Union" class="headerlink" title="- Intersection Over Union"></a><a name="intersection_over_union"></a>- Intersection Over Union</h6><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_3.png" alt="Details of the Label"></p>
+<p>By convention, 0.5 is used very often to define as a threshold to judge as whether the predicted bounding box is correct or not. For example, if the intersection over union is greater than 0.5, we say the prediction is an correct answer.</p>
+<p>$IOU$ can also be used as a way to measure how similar tow bounding boxes are to each other.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Non-max-Suppression"><a href="#Non-max-Suppression" class="headerlink" title="- Non-max Suppression"></a><a name="non_max_suppression"></a>- Non-max Suppression</h6><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/yolo_4.png" alt="Details of the Label"><br>The algorithm may find multiple detections of the same objects. For example, in the above figure, it finds 2 bounding boxes for the cat and 3 boxes for the dog. The non-max suppression algorithm ensures each object only be detected once.</p>
+<p>Procedure:<br>1) discard all boxes with $p_c \leq 0.6$<br>2) while there are any remaining boxes:<br>  a. pick the box with the largest $p_c$ as a prediction outputs<br>  b. discard any remaining box with $IOU \geq 0.5$ with the selected box in last step, and repeat from a.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Anchor-Boxes"><a href="#Anchor-Boxes" class="headerlink" title="- Anchor Boxes"></a><a name="anchor_boxes"></a>- Anchor Boxes</h5><p>The previous methods can only detect one object in one cell. But in some cases, there are more than one objects in a cell. To address this issue, we can per-define bounding boxes with different shapes.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/anchor_box_1.png" alt="Anchor Box"></p>
+<p>Therefore, each object in a training image is assigned to:</p>
+<ul>
+<li>a grid cell that contains the object’s mid point</li>
+<li>a anchor box for the grid cell with highest $IOU$</li>
+</ul>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/anchor_box_2.png" alt="Anchor Box"></p>
+<p><strong>Making predictions:</strong></p>
+<ul>
+<li>For each grid cell, we can get 2 (number of anchor boxes) predicted bounding boxes.</li>
+<li>Get rid of low probability Predictions</li>
+<li>For each class ($c_1$, $c_2$, $c_3$) use non-max suppression to generate final predictions.</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Face-Verification"><a href="#Face-Verification" class="headerlink" title="- Face Verification"></a><a name="face_verification"></a>- Face Verification</h4><h5 id="One-Shot-Learning-Learning-a-“similarity”-function"><a href="#One-Shot-Learning-Learning-a-“similarity”-function" class="headerlink" title="- One-Shot Learning (Learning a “similarity” function)"></a><a name="one_shot_learning"></a>- One-Shot Learning (Learning a “similarity” function)</h5><p>The one-shot learning in this situation is: learning from one example to recognise the person again.</p>
+<p>The function $d(img1,img2)$ denotes the degree of difference between img1 and img2.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification.png" alt="One-Shot Learning"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Siamese-Network-Learning-difference-similar-degree"><a href="#Siamese-Network-Learning-difference-similar-degree" class="headerlink" title="- Siamese Network (Learning difference/similar degree)"></a><a name="siamese_network"></a>- Siamese Network (Learning difference/similar degree)</h6><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_1.png" alt="Siamese Network"></p>
+<p>If we believe the encoding function $f(x)$ is a good representation of a picture, we can define the distance as shown in the bottom of the above figure.</p>
+<p><strong>Learning</strong>:</p>
+<p>Learnable parameters: parameters of the neural network defining an encoding $f(x)$</p>
+<p>Learn these parameters so that:</p>
+<ul>
+<li>if $x^{(i)}$ and $x^{(j)}$ are the same person, $||f(x^{(i)}) - f(x^{(j)})||^2$ is smaller</li>
+<li>if $x^{(i)}$ and $x^{(j)}$ are the different people, $||f(x^{(i)}) - f(x^{(j)})||^2$ is large</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Triplet-Loss-See-three-pictures-at-one-time"><a href="#Triplet-Loss-See-three-pictures-at-one-time" class="headerlink" title="- Triplet Loss (See three pictures at one time)"></a><a name="triplet_loss"></a>- Triplet Loss (See three pictures at one time)</h6><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_2.png" alt="Triplet Loss"></p>
+<p>The three pictures are:</p>
+<ul>
+<li>Anchor Picture</li>
+<li>Positive Picture: another picture of the same person in the anchor picture</li>
+<li>Negative Picture: another picture of not the same person in the anchor picture.</li>
+</ul>
+<p>But there would be a problem just learning the above loss function. This loss function may lead to learning $f(A)=f(P)=f(N)$.</p>
+<p>To prevent from this problem, we can add a term smaller than zero, i.e., $||f(A)-f(P)||^2-||f(A)-f(N)||^2 \leq  0-\alpha$.</p>
+<p>To reorganise it:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_3.png" alt="Triplet Loss"></p>
+<p>To summarise the <strong>loss function</strong>:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_4.png" alt="Triplet Loss"></p>
+<p><strong>Choose the triples of A, P, N</strong>:<br>During training, if A, P, N are chosen randomly, it is easy to satisfied $d(A,P) + \alpha \leq d(A,N)$. The learning algorithm (i.e. gradient descent will not do anything).</p>
+<p>We should choose triples that are hard to train on.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_5.png" alt="&quot;Hard&quot; Examples"></p>
+<p>When using hard triples to train, the gradient descent procedure has to do some works to try to push these quantities further away from quantities.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Face-Recognition-Verification-and-Binary-Classification"><a href="#Face-Recognition-Verification-and-Binary-Classification" class="headerlink" title="- Face Recognition/Verification and Binary Classification"></a><a name="face_recognition_verification_and_binary_classification"></a>- Face Recognition/Verification and Binary Classification</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_6.png" alt="Binary Classification"></p>
+<p>we can learn a sigmoid binary classification function:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_7.png" alt="Binary Classification"></p>
+<p>We can also use other variations such as chi square similarity:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/face_verification_8.png" alt="Binary Classification"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Neural-Style-Transfer"><a href="#Neural-Style-Transfer" class="headerlink" title="- Neural Style Transfer"></a><a name="neural_style_transfer"></a>- Neural Style Transfer</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_1.png" alt="Style Transfer"></p>
+<p>The content image is from the movie Bolt.<br>The style image is a part of One Hundred Stallions, one of the most famous Chinese ancient paintings.<br>The generated image is supported by <a href="https://deepart.io" target="_blank" rel="external">https://deepart.io</a>.</p>
+<p>The loss function $J$ contains two parts: $J_{content}$ and $J_{style}$. To find the generated image $G$:</p>
+<ol>
+<li>Randomly initialise image $G$</li>
+<li>Use gradient descent to minimise $J(G)$</li>
+</ol>
+<p><strong>Content Cost Function, $J_{content}$</strong>:<br>The content cost function ensures that the content of the original image is not lost.</p>
+<p>1) use a hidden layer (not too deep and also not too shallow), $l$, to compute the content cost. (we can use the layer $l$ from a pre-trained CONV neural network)</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_2.png" alt="Select a Hidden Layer"></p>
+<p>2)<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_3.png" alt="Activation of Layer l"></p>
+<p>3)<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_4.png" alt="Content Cost"></p>
+<p><strong>Style Cost Function, $J_{style}$</strong>:</p>
+<p>1) say we are using layer $l’s$ activation to measure style.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_5.png" alt="Select a Hidden Layer"></p>
+<p>2) define the style of an image as correlation between activations across channels</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_6.png" alt="Channels of Layer l"></p>
+<p>The elements in matrix $G$ reflects how correlated are the activations across different channels (e.g. whether or not high level texture components tend to occur or not occur together).</p>
+<p>For style image:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_7.png" alt="Matrix of the Style Image"></p>
+<p>For generated image:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_8.png" alt="Matrix G of the Generated Image"></p>
+<p><strong>Style Function</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_9.png" alt="Style Function"></p>
+<p>You may can also consider combine the style loss of different layers.</p>
+<p> <img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/style_transfer_10.png" alt="Style Loss Function Combining Different Layers "></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="1D-and-3D-Convolution-Generalisations"><a href="#1D-and-3D-Convolution-Generalisations" class="headerlink" title="- 1D and 3D Convolution Generalisations"></a><a name="1d_and_3d_generalisations"></a>- 1D and 3D Convolution Generalisations</h4><p> <img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/1d_and_3d_generalisations.png" alt="1D and 3D Generalisations"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Sequence-Models"><a href="#Sequence-Models" class="headerlink" title="Sequence Models"></a><a name="sequence_models"></a>Sequence Models</h3><h4 id="Recurrent-Neural-Network-Model"><a href="#Recurrent-Neural-Network-Model" class="headerlink" title="- Recurrent Neural Network Model"></a><a name="recurrent_neural_network"></a>- Recurrent Neural Network Model</h4><p><strong>Forward:</strong><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_forward.png" alt="RNN"></p>
+<p>In this figure, the red parameter are learnable variables, $W$ and $b$. In the end of each step, the loss of this step is computed.</p>
+<p>Finally, all the loss of each step are summed up as the total loss, $L$, for the whole sequence.</p>
+<p>Here is the formula for each step:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_backprop.png" alt="Backpropagation Through Time"></p>
+<p>The total loss:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/total_loss.png" alt="Total Loss"></p>
+<p><strong>Backpropagation Through Time:</strong><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/rnn_back.png" alt="Backpropagation Through Time"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Gated-Recurrent-Unit-GRU"><a href="#Gated-Recurrent-Unit-GRU" class="headerlink" title="- Gated Recurrent Unit (GRU)"></a><a name="gated_recurrent_unit"></a>- Gated Recurrent Unit (GRU)</h4><h5 id="GRU-Simplified"><a href="#GRU-Simplified" class="headerlink" title="- GRU (Simplified)"></a><a name="gru_simplified"></a>- GRU (Simplified)</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/gru_simplified.png" alt="GRU (Simplified)"></p>
+<h5 id="GRU-Full"><a href="#GRU-Full" class="headerlink" title="- GRU (Full)"></a><a name="gru_full"></a>- GRU (Full)</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/gru_full.png" alt="GRU (full)"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Long-Short-Term-Memory-LSTM"><a href="#Long-Short-Term-Memory-LSTM" class="headerlink" title="- Long Short Term Memory (LSTM)"></a><a name="long_short_term_memory"></a>- Long Short Term Memory (LSTM)</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/long_short_term_memory.png" alt="Long Short Term Memory (LSTM)"></p>
+<ul>
+<li>$u$: update gate</li>
+<li>$f$: forget gate</li>
+<li>$o$: output gate</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Bidirectional-RNN"><a href="#Bidirectional-RNN" class="headerlink" title="- Bidirectional RNN"></a><a name="bidirectional_rnn"></a>- Bidirectional RNN</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bidirectional_rnn.png" alt="Bidirectional RNN"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Deep-RNN-Example"><a href="#Deep-RNN-Example" class="headerlink" title="- Deep RNN Example"></a><a name="deep_rnn_example"></a>- Deep RNN Example</h4><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/deep_rnn_example.png" alt="Deep RNN Example"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Word-Embedding"><a href="#Word-Embedding" class="headerlink" title="- Word Embedding"></a><a name="word_embedding"></a>- Word Embedding</h4><h5 id="One-Hot"><a href="#One-Hot" class="headerlink" title="- One-Hot"></a><a name="one_hot"></a>- One-Hot</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/one_hot.png" alt="One-Hot"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Embedding-Matrix-E"><a href="#Embedding-Matrix-E" class="headerlink" title="- Embedding Matrix ($E$)"></a><a name="embedding_matrix"></a>- Embedding Matrix ($E$)</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/embedding_matrix.png" alt="Embedding Matrix"></p>
+<p>The $UNK$ is a special work which represents unknown words. All the unseen words will be casted to $UNK$.</p>
+<p>The matrix is denoted by $E$. If we want to get the word embedding for a word, we can use the word’s one-hot vector as follows:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/get_embedding.png" alt="Get Word Embedding"></p>
+<p>In general, it can be formulised as:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/get_embedding_equation.png" alt="Get Word Embedding Equation"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Learning-Word-Embedding"><a href="#Learning-Word-Embedding" class="headerlink" title="- Learning Word Embedding"></a><a name="learning_word_embedding"></a>- Learning Word Embedding</h5><p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/learning_word_embedding.png" alt="Learning Word Embedding"></p>
+<p>In the model, the embedding matrix (i.e. $E$) is learnable as the same as the other parameters (i.e. $w$ and $b$). All the learnable parameters are highlighted by blue.</p>
+<p>The general idea of the model is predicting the target word given its context. In the above figure, the context is the last 4 words (i.e. a, glass, of, orange) and the target word is “to”.</p>
+<p>In addition, there are different ways to define the context of the target word such as:</p>
+<ul>
+<li>last $n$ words</li>
+<li>$n$ words left and right the target word</li>
+<li>nearby one word (idea of Skip-gram)</li>
+<li>…</li>
+</ul>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Word2Vec-amp-Skip-gram"><a href="#Word2Vec-amp-Skip-gram" class="headerlink" title="- Word2Vec &amp; Skip-gram"></a><a name="word2vec_and_skip_gram"></a>- Word2Vec &amp; Skip-gram</h5><p><strong>Sentence:</strong> I want a glass of orange juice to go along with my cereal.</p>
+<p>In this word embedding learning model, the <strong>context</strong> is a word randomly picked from the sentence. The <strong>target</strong> is a word randomly picked up with a window of the context word.</p>
+<p>For example:</p>
+<p>let us say the context word is ‘orange’, we may get the following training examples.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/skip_gram_context_target.png" alt="Context and Target"></p>
+<p><strong>Model</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/skip_gram_model.png" alt="Model"></p>
+<p>The softmax function is defined as:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/word_embedding_softmax.png" alt="Softmax"></p>
+<p>$\theta_t$ is the parameter associate with the output and $e_c$ is the current embedding for the context word.</p>
+<p>The <strong>problem</strong> of using the softmax function is the computation cost of denominator is too much as we may have a very large vocabulary. In order to reduce the computation, negative sampling is decent solution.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Negative-Sampling"><a href="#Negative-Sampling" class="headerlink" title="- Negative Sampling"></a><a name="negative_sampling"></a>- Negative Sampling</h5><p><strong>Sentence:</strong> I want a glass of orange juice to go along with my cereal.</p>
+<p>Given a pair of words (i.e. context word an another word), and a label (i.e. whether the second word is the target word). As shown in the below figure, the (orange juice 1) is a positive example as the word juice is the real target word of orange. Because all the other words are randomly selected from dictionary, these words are considered as wrong target words. So these pairs are negative examples (it is ok if the real target word is selected as a negative example by chance).</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/negative_sampling.png" alt="Negative Sampling"></p>
+<p>As for the number of negative words for each context word, if the dataset is small, $k=5-20$ and if the dataset is a very large one, $k=2-5$.</p>
+<p><strong>Model</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/negative_sampling_model.png" alt="Negative Sampling Model"></p>
+<p>We only train $K+1$ logistic regression models of the softmax function. Thus the computation is much lower and cheaper.</p>
+<p><strong>How to choose negative examples?</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sample_word_distribution.png" alt="Sampling Distribution"></p>
+<p>$f(w_i)$ is the word frequency.</p>
+<p>if we use the first sample distribution, we may always select words like the, of, and etc. But if we use the third distribution, the selected words would be non-representative. Therefore, the second distribution could be considered as a better one for sampling. This distribution is at somewhere between the first one and the third one.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="GloVe-Vector"><a href="#GloVe-Vector" class="headerlink" title="- GloVe Vector"></a><a name="glove_vector"></a>- GloVe Vector</h5><p><strong>Notation</strong>: $X_{ij} = $ number of times word $i$ appears in the context of word $j$</p>
+<p><strong>Model</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/glove.png" alt="Objective Function"></p>
+<p>$X_{ij}$ measures how related are those two words and how often these two words occurs together. $f(X_{ij})$ is a weight term. It gives high frequency pairs not too high weights and also gives less common pairs not too little weights.</p>
+<p>If we check the math of $\theta$ and $e$, actually they play the same role. Therefore, the final word embedding of a word is:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/glove_final_embedding.png" alt="Final Word Embedding"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Deep-Contextualized-Word-Representations-ELMo-Embeddings-from-Language-Models"><a href="#Deep-Contextualized-Word-Representations-ELMo-Embeddings-from-Language-Models" class="headerlink" title="- Deep Contextualized Word Representations (ELMo, Embeddings from Language Models)"></a><a name="elmo"></a>- Deep Contextualized Word Representations (ELMo, Embeddings from Language Models)</h5><p><em>Pre-train bidirectional language model</em></p>
+<p>Forward language model: Given a sequence of $N$ tokens, $(t_1,t_2,…,t_N)$, a forward language model compute the probability of the sequence by modelling the probability of $t_k$ given the history, i.e.,</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/forward_language_model.jpg" alt=""></p>
+<p>Backward language model: similarly,<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/backward_langauge_model.jpg" alt=""></p>
+<p>Bidirectional language model: it combines both a forward and backward language model. Jointly maximize the likelihood of the forward and backward directions:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bi_language_model.jpg" alt=""></p>
+<p>LSTMs are used to model the forward and backward language models.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/biLM.png" alt="bidirectional language model"></p>
+<p>In terms of the input embeddings, we can just initialise these embeddings or use a pre-trained embedding. For ELMo, it is a bit more complicated by using character embeddings and convolutional layer as shown below.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/input-embedding.png" alt="Input Embeddings"></p>
+<p><em>After the language model is trained, we can get the ELMo embedding of a word in a sentence:</em><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/elmo.png" alt="ELMo"></p>
+<p>In the ELMo, $s$ are softmax-normalized weights and $\gamma$ is the scalar parameter allows the task model to scale the entire ELMo vector. These parameters can be learned during tarining of the task-specific model.</p>
+<p>Reference:<br>[1] <a href="https://www.slideshare.net/shuntaroy/a-review-of-deep-contextualized-word-representations-peters-2018" target="_blank" rel="external">https://www.slideshare.net/shuntaroy/a-review-of-deep-contextualized-word-representations-peters-2018</a><br>[2] <a href="http://jalammar.github.io/illustrated-bert/" target="_blank" rel="external">http://jalammar.github.io/illustrated-bert/</a><br>[3] <a href="https://www.mihaileric.com/posts/deep-contextualized-word-representations-elmo/" target="_blank" rel="external">https://www.mihaileric.com/posts/deep-contextualized-word-representations-elmo/</a></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Sequence-to-Sequence-Model-Example-Translation"><a href="#Sequence-to-Sequence-Model-Example-Translation" class="headerlink" title="- Sequence to Sequence Model Example: Translation"></a><a name="sequence_to_sequence_model_example"></a>- Sequence to Sequence Model Example: Translation</h4><p>The task is translate a sequence to another sequence. The two sequences may have different length.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sequence_to_sequence.png" alt="Sequence to Sequence"><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/sequence_to_sequence_model.png" alt="Model"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Pick-the-most-likely-sentence-Beam-Search"><a href="#Pick-the-most-likely-sentence-Beam-Search" class="headerlink" title="- Pick the most likely sentence (Beam Search)"></a><a name="pick_the_most_likely_sentence"></a>- Pick the most likely sentence (Beam Search)</h5><h6 id="Beam-Search"><a href="#Beam-Search" class="headerlink" title="- Beam Search"></a><a name="beam_search"></a>- Beam Search</h6><p>Using sequence to sequence models is popular in machine translation. As shown in the figure, the translation is generated token by token. One of the problems is how to pick up the most likely whole sentence? The greedy search does not work (i.e. pick the best word at each step). Beam Search is a much better solution to this situation.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/beam_search.png" alt="Beam Search (Beam Width = 3)"></p>
+<p>Let us say the beam search width is 3. Therefore, at each step,  we only keep the top 3 best prediction sequences.</p>
+<p>For example (as shown in the above picture),</p>
+<ul>
+<li>at step 1, we keep in, June, September</li>
+<li>at step 2, we keep the sequences: (in, September), (June is), (June visits)</li>
+<li>…</li>
+</ul>
+<p>As for the beam search width, if we have a large width ,we can get better result, but it would make the model slower. One the other hand, if the width is smaller, the model would be faster but it may hurt its performance. The beam search width is a hyper parameter and the best value maybe domain dependent.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Length-Normalisation"><a href="#Length-Normalisation" class="headerlink" title="- Length Normalisation"></a><a name="length_normalisation"></a>- Length Normalisation</h6><p>The learning of the translation model is to maximise:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_1.png" alt="Beam Search (Beam Width = 3)"><br>In the log space that is:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_2.png" alt="Beam Search (Beam Width = 3)"><br>The problem of the above objective function is that the score in log space is always negative, therefore using this function will make the model prefers a very short sentence. We do not want the translation is too short actually.</p>
+<p>We can add a length normalisation term at the beginning:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/length_norm_3.png" alt="Beam Search (Beam Width = 3)"><br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h6 id="Error-Analysis-in-Beam-Search-heuristic-search-algorithm"><a href="#Error-Analysis-in-Beam-Search-heuristic-search-algorithm" class="headerlink" title="- Error Analysis in Beam Search (heuristic search algorithm)"></a><a name="error_analysis_in_beam_search"></a>- Error Analysis in Beam Search (heuristic search algorithm)</h6><p>When tuning the parameters of the model, we need to decide the priority of them (i.e. which is more to blame, the RNN or the beam search part). (Usually increasing beam search width will not hurt the performance).</p>
+<p><strong>Example</strong><br>Pick a sentence from the dev set and check our model:</p>
+<p><strong>Sentence:</strong> Jane visite l’Afrique en septembre.<br><strong>Translation from Human:</strong> Jane visits Africa in September. ($y^*$)<br><strong>Output of the Algorithm (our model):</strong> Jane visited Africa last September. ($\hat{y}$)</p>
+<p>To figure out which one is more to blame, we need to compute and compare $p(y^*|x)$ and $p(\hat{y}|x)$ according to the RNN neural network.</p>
+<p>if $p(y^*) &gt; p(\hat{y}|x)$:<br>$y^{*}$ obtains a higher probability, we can conclude that the beam search is at fault.</p>
+<p>if $p(y^*) \leq p(\hat{y}|x)$:<br>The RNN predicted $p(y^*) \leq p(\hat{y}|x)$, but actually $y^*$ is a better translation than $\hat{y}$ as it is from a real human. Therefore, the RNN model should be at fault.</p>
+<p>By repeating the above error analysis process on multiple instances in the dev set, we can get the following table:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/beam_search_error_analysis.png" alt="Beam Search (Beam Width = 3)"><br>Based on the table, we can figure out what faction of errors are due to beam search/RNN.</p>
+<p>If most of the error are due to the beam search, just try to increase the beam search width. Otherwise, we may try to make the RNN more deeper/add regularisation/get more training data/try different architectures.<br><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Bleu-Score"><a href="#Bleu-Score" class="headerlink" title="- Bleu Score"></a><a name="bleu_score"></a>- Bleu Score</h5><p>If there are multiple great answers/references for one sentence, we can use Bleu Score to measure our model’s accuracy.</p>
+<p><strong>Example (Bleu Score on bigrams):</strong></p>
+<p><strong>French:</strong> Le chat est sur le tapis.<br><strong>Reference1:</strong> The cat is on the mat.<br><strong>Reference2:</strong> There is a cat on the mat.</p>
+<p><strong>The output of our model:</strong> The cat the cat on the cat.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bleu_score_example.png" alt="Bleu Score on Bigram Example"></p>
+<p>The <strong>Count</strong> is the number of current bigrams appears in the output. The <strong>Clipped Count</strong> is the maximum number of times that the bigram appears in either reference 1 or reference 2.</p>
+<p>Then the Bleu Score on bigrams can be computed as:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bleu_score.png" alt="Bleu Score on Bigram"></p>
+<p>The above equation can be used to compute unigram, bigram or any-gram Bleu scores.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Combined-Bleu"><a href="#Combined-Bleu" class="headerlink" title="- Combined Bleu"></a><a name="combined_bleu"></a>- Combined Bleu</h5><p>The combined Bleu score combines the scores on different grams. $p_n$ denotes the Bleu Score on n-grams only. If we have $P_1$, $P_2$, $P_3$ and $P_4$, we can combined as following:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/combined_bleu_score.png" alt="Bleu Score on Bigram"></p>
+<p>The brevity penalty penalises short translation. (we do not want translation very short as short translations will lead high precisions.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h5 id="Attention-Model"><a href="#Attention-Model" class="headerlink" title="- Attention Model"></a><a name="attention_model"></a>- Attention Model</h5><p>One problem of RNN (e.g. lstm) is it is hard for it to memorise a super long sentence. The model translation quality would decrease as the length of original sentence increases.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_model_with_comments.png" alt="Attention Model"></p>
+<p>There are different ways to compute the attention. One way is:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_computation.png" alt="Attention Computation"></p>
+<p>In this method, we use a small neural network to map the previous and current information to an attention weight.</p>
+<p>It has already been proven that attention models work very well such as normalisation.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/attention_model_on_normalisation.png" alt="Attention Model Example"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Transformer-Attention-Is-All-You-Need"><a href="#Transformer-Attention-Is-All-You-Need" class="headerlink" title="- Transformer (Attention Is All You Need)"></a><a name="transformer"></a>- Transformer (Attention Is All You Need)</h3><p><strong>Architecture:</strong><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/transformer.png" alt="Transformer"><br><strong>Details:</strong><br><em>Input Embeddings</em><br>The input embeddings of the model are the summation of the word embedding and its position encoding for each word. For example, for the input sentence $\mathbf{x}=[\mathbf{x_1},\mathbf{x_2},\mathbf{x_3}]$.  $\mathbf{x}$ are the word embeddings (could be a pre-trained embedding) for each word in the sentence. The input embedding should be $[\mathbf{x_1} + \mathbf{t_1},\mathbf{x_2} + \mathbf{t_2},\mathbf{x_3} + \mathbf{t_3}]$.</p>
+<p>$[\mathbf{t_1,t_2,t_3}]$ are the position encodings of each word. There are many ways to encode the word position. In the paper, the used encoding method is:</p>
+<p>$t_{position,2i}=sin(\frac{pos}{10000^{\frac{2i}{dmodel}}})$<br>$t_{position,2i+1}=cos(\frac{pos}{10000^{\frac{2i}{dmodel}}})$</p>
+<p>$position$ is the position of the word in the sentence. $i$ is the element position of the position encoding. $dmodel$ is the output dimension size of the encoder in the model.</p>
+<p><em>Decoder</em></p>
+<ul>
+<li>the output of the top encoder is transformed into attention vectors $K$ and $V$. These are used in the multi-head attention sublayer (also named encoder-decoder attention). The attention vectors can help the decoder focus on useful places of the input sentence.</li>
+<li>the masked self-attention is only allowed to attend to earlier positions of the output sentence. Therefore, the future positions are masked by setting them to -inf before the softmax step.</li>
+<li>the “multi-head attention” layer is similar to the self-attention layer in encoder, except:<ul>
+<li>it takes the $K$ and $V$ from the output of the top encoder</li>
+<li>it creates the $Q$ from the layer below it</li>
+</ul>
+</li>
+</ul>
+<p>Reference: <a href="https://jalammar.github.io/illustrated-transformer/" target="_blank" rel="external">https://jalammar.github.io/illustrated-transformer/</a></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Bidirectional-Encoder-Representations-from-Transformers-BERT"><a href="#Bidirectional-Encoder-Representations-from-Transformers-BERT" class="headerlink" title="- Bidirectional Encoder Representations from Transformers (BERT)"></a><a name="bert"></a>- Bidirectional Encoder Representations from Transformers (BERT)</h3><p>BERT is built by stacking Transformer Encoders.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-0.png" alt="BERT"></p>
+<p><em>Pre-train the model on large unlabelled text (predict the masked word)</em><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-pretrain.png" alt="BERT Pretrain"><br>“The masked language model randomly masks some of the tokens from the input, and the objective is to predict the original vocabulary id of the masked word based only on its context.” [2]</p>
+<p><em>Use supervised train to fine-tune the model on a specific task, e.g. classification task, NER etc</em><br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-classification.png" alt="BERT Classification"></p>
+<p>The figure below from the BERT paper shows how to use the model to different tasks.<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/bert-tasks.png" alt="BERT on different tasks"></p>
+<p>If the specific-task is not a classfication task, the [CLS] can just be ignored.</p>
+<p>Reference:<br>[1] <a href="http://jalammar.github.io/illustrated-bert/" target="_blank" rel="external">http://jalammar.github.io/illustrated-bert/</a><br>[2] Devlin, J., Chang, M.W., Lee, K. and Toutanova, K., 2018. Bert: Pre-training of deep bidirectional transformers for language understanding. <em>arXiv preprint arXiv:1810.04805</em>.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h3 id="Practical-Tips"><a href="#Practical-Tips" class="headerlink" title="Practical Tips"></a><a name="tips"></a>Practical Tips</h3><h4 id="Train-Dev-Test-Dataset"><a href="#Train-Dev-Test-Dataset" class="headerlink" title="- Train/Dev/Test Dataset"></a><a name="train_dev_test"></a>- Train/Dev/Test Dataset</h4><ul>
+<li>Usually, we use <strong>70%</strong> of a dataset as training data and 30% as test set; or <strong>60%</strong>(train)/<strong>20%</strong>(dev)/<strong>20%</strong>(test). But if we have a big dataset, we can use most of the instances as training data (e.g. 1,000,000, <strong>98%</strong>) and make the sizes of dev and test set equally (e.g. 10,000 (<strong>1%</strong>) for dev and 10,000 (<strong>1%</strong>) for test set). Because our dataset is big, 10,000 examples in dev and test set are more than enough.</li>
+<li>Make sure the dev and test set come from the same distribution</li>
+</ul>
+<p><strong>Another situation</strong> we maybe in is:<br>1) we want to build a system for a specific domain, but we only have a few labelled dataset in that domain (e.g. 10,000)<br>2) we can get a much larger dataset (e.g. 200,000 instances) from similar tasks.</p>
+<p>In this case, how to build our train, dev and test set?</p>
+<p>The easiest way is just combine the two datasets and shuffle it. Then we can divide the combined datasets into three parts (train, dev and test set). BUT it is not a good idea. Because our goal is to build a system for our own specific domain. There is no point that adding some instances which is not from our own domain into the dev/test dataset to evaluate our system.</p>
+<p>The reasonable method is:<br>1) all the instances (e.g. 200,000) which are available more easily are added into the training set<br>2) Pick some instances from the specific domain datasets and add them into the training set<br>3) Divide the remain instances of our own domain into dev and test set</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_train_and_dev_test.png" alt="dataset"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Over-UnderFitting-Bias-Variance-Comparing-to-Human-Level-Performance-Solutions"><a href="#Over-UnderFitting-Bias-Variance-Comparing-to-Human-Level-Performance-Solutions" class="headerlink" title="- Over/UnderFitting, Bias/Variance, Comparing to Human-Level Performance, Solutions"></a><a name="over_and_under_fitting"></a>- Over/UnderFitting, Bias/Variance, Comparing to Human-Level Performance, Solutions</h4><h5 id="Over-UnderFitting-Bias-Variance"><a href="#Over-UnderFitting-Bias-Variance" class="headerlink" title="Over/UnderFitting, Bias/Variance"></a><em>Over/UnderFitting, Bias/Variance</em></h5><p>For a classification task, the human classification error is supposed to be around 0%. The analysis of various possible performances of the supervised model on the both training and dev set is as shown below.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human-Level Error</td>
+<td>0.9%</td>
+<td>0.9%</td>
+<td>0.9%</td>
+<td>0.9%</td>
+</tr>
+<tr>
+<td>Training Set Error</td>
+<td>1%</td>
+<td>15%</td>
+<td>15%</td>
+<td>0.5%</td>
+</tr>
+<tr>
+<td>Test Set Error</td>
+<td>11%</td>
+<td>16%</td>
+<td>30%</td>
+<td>1%</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>overfitting</td>
+<td>underfitting</td>
+<td>underfitting</td>
+<td>good</td>
+</tr>
+<tr>
+<td></td>
+<td>high variance</td>
+<td>high bias</td>
+<td>high bias and variance</td>
+<td>low bias and variance</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Solutions</strong>:<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/solutions_2.png" alt="solutions for high bias and variance"></p>
+<h5 id="Comparing-to-Human-Level-Performance"><a href="#Comparing-to-Human-Level-Performance" class="headerlink" title="Comparing to Human-Level Performance"></a><em>Comparing to Human-Level Performance</em></h5><p>You may have noticed that, in the table above, the human-level error was set 0.9%, what if the human-level performances are different but the train/dev errors are the same?</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human-Level Error</td>
+<td><strong>1%</strong></td>
+<td><strong>7.5%</strong></td>
+</tr>
+<tr>
+<td>Training Set Error</td>
+<td>8%</td>
+<td>8%</td>
+</tr>
+<tr>
+<td>Test Set Error</td>
+<td>10%</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Comments</td>
+<td>high bias</td>
+<td>high variance</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Although the model errors are the same, in the left case where the human error is 1%, we have the problem of high bias and have the high variance problem in the right case.</p>
+<p>As for the performance of model, sometimes it could work better than that of human. But so long as the model performance is worse than human’s, we can:<br>1) get more labelled data from humans<br>2) gain insights from manual error analysis<br>3) gain insights from bias/variance analysis</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Mismatched-Data-Distribution"><a href="#Mismatched-Data-Distribution" class="headerlink" title="- Mismatched Data Distribution"></a><a name="mismatched_data_distribution"></a>- Mismatched Data Distribution</h4><p>When we are building a system for our own specific domain, we only have a few labelled instances (e.g. 10,000) for our own problem. But it is easy for us to collect a lot of instances (e.g. 200,000) from another similar domain. Moreover, the large amount of easily available instances could be helpful to train a good model. The dataset may look like this:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_train_and_dev_test.png" alt="dataset"></p>
+<p>But in this case, the data distribution of training set is different with dev/test set. This may cause side effects - data mismatch problem.</p>
+<p>In order to check whether we have the data mismatch problem, we should randomly pick up a subset of training set as a validation set named train-dev dataset. This set has the same distribution of training set, but will not be used for training.</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_data_distribution_2.png" alt="dataset"></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Human-Level Error</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+<td>0%</td>
+</tr>
+<tr>
+<td>Train Error</td>
+<td>1%</td>
+<td>1%</td>
+<td>10%</td>
+<td>10%</td>
+</tr>
+<tr>
+<td>Train-Dev Error</td>
+<td>9%</td>
+<td>1.5%</td>
+<td>11%</td>
+<td>11%</td>
+</tr>
+<tr>
+<td>Dev Error</td>
+<td>10%</td>
+<td>10%</td>
+<td>12%</td>
+<td>20%</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>high variance</td>
+<td>data mismatch</td>
+<td>high bias</td>
+<td>high bias + data mismatch</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>To summarize:</p>
+<p><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/mismatch_summarization.png" alt="measure of different problems"></p>
+<h5 id="Addressing-the-Mismatch-Data-Distribution-Problem"><a href="#Addressing-the-Mismatch-Data-Distribution-Problem" class="headerlink" title="Addressing the Mismatch Data Distribution Problem"></a><em>Addressing the Mismatch Data Distribution Problem</em></h5><p>Firstly, making a manually error analysis to try to understand what is the difference between our training set and dev/test set.</p>
+<p>Secondly, according to the analysis result, we can try to make the training instances more similar to the dev/test instances. We can also try to collect more training data similar to the data distribution of dev/test set.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Input-Normalization"><a href="#Input-Normalization" class="headerlink" title="- Input Normalization"></a><a name="input_normalization"></a>- Input Normalization</h4><p>We have a train set including $m$ examples. $X^{(i)}$ represents the $i^{th}$ exmaple. The inputs normalization is as follows.</p>
+<p>$X:=\frac{X-\mu}{\sigma^2}$,<br>$\mu=\frac{1}{m}\sum_{i=1}^mX^{(i)}$,<br>$\sigma^2=\frac{1}{m}\sum_{i=1}^m(X^{(i)})^2$</p>
+<p><strong>!Note:</strong> MUST use the same $\mu$ and $\sigma^2$ of training data to normalize the test dataset.</p>
+<p>Using input normalization could make training faster.</p>
+<p>Suppose the inputs are two dimensional, $X = [X_1, X_2]$. The ranges are [1-1000] and [1-10] of $X_1$ and $X_2$ respectively. The loss function may look like this (left):<br><img src="/2018/01/23/Super-Machine-Learning-Revision-Notes/normalization.png" alt="left:non-normalized right: normalized"></p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Use-a-Single-Number-Model-Evaluation-Metric"><a href="#Use-a-Single-Number-Model-Evaluation-Metric" class="headerlink" title="- Use a Single Number Model Evaluation Metric"></a><a name="single_number_model_evaluation_metric"></a>- Use a Single Number Model Evaluation Metric</h4><p>If we not only care about the performance of model (e.g. accuracy, F-score etc.), but also the running time, we can design a single number evaluation metric to evaluate our model.</p>
+<p>For example, we can combine the performance metric and running time such as $metric=accuracy-0.5*RunningTime$.</p>
+<p>Alternatively, we can also specify the maximal running time we can accept:<br>$max: accuracy$<br>$subject: RunningTime &lt;= 100ms$</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+<h4 id="Error-Analysis-Prioritize-Next-Steps"><a href="#Error-Analysis-Prioritize-Next-Steps" class="headerlink" title="- Error Analysis (Prioritize Next Steps)"></a><a name="error_analysis"></a>- Error Analysis (Prioritize Next Steps)</h4><p>Doing error analysis is very helpful to prioritize next steps for improving the model performance.</p>
+<h5 id="Carrying-Out-Error-Analysis"><a href="#Carrying-Out-Error-Analysis" class="headerlink" title="Carrying Out Error Analysis"></a><em>Carrying Out Error Analysis</em></h5><p>For example, in order to find out why the model mislabelled some instances, we can get around 100 <strong>mislabelled</strong> examples from the dev set and make an error analysis (manually check them one by one).</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Dog</th>
+<th>Big Cat</th>
+<th>Blurry</th>
+<th>Comments</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>$\surd$</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td></td>
+<td></td>
+<td>$\surd$</td>
+<td></td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+<td>$\surd$</td>
+<td>$\surd$</td>
+<td></td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>percentage</td>
+<td>8%</td>
+<td>43%</td>
+<td>61%</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>By manually checking these mislabelled instances one by one, we can estimate where are the errors from. For example, in the abovementioned table, we found 61% images are blurry, therefore in the next step, we can mainly focus to improve the performance in blurry images recognition.</p>
+<h5 id="Cleaning-Up-Incorrectly-Labelled-Data"><a href="#Cleaning-Up-Incorrectly-Labelled-Data" class="headerlink" title="Cleaning Up Incorrectly Labelled Data"></a><em>Cleaning Up Incorrectly Labelled Data</em></h5><p>Sometimes, our dataset is noisy. In other words, there are some incorrect labels in the dataset. Similarly, we can pick up around 100 instances from dev/test set and manually check them one by one.</p>
+<p>For example, currently the model error on dev/test set is 10%. Then we manually check the randomly picked 100 instances from the dev/test set.</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Image</th>
+<th>Incorrect Label</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td>3</td>
+<td></td>
+</tr>
+<tr>
+<td>4</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>$\surd$</td>
+</tr>
+<tr>
+<td>…</td>
+<td>…</td>
+</tr>
+<tr>
+<td>percentage</td>
+<td>6%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Let’s say, finally we found 6% instances were labelled incorrectly. Based on it, we can guess around $10\%*6\%=0.6\%$ errors due incorrect labels and $9.4\%$ errors due other reasons.</p>
+<p>Therefore, if we focus on correcting labels maybe not a good idea in the next step.</p>
+<p><strong><a href="https://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#tableofcontents">Back to Table of Contents</a></strong></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/" data-id="cm7elzvnf000gmgtjxqm2wr5q" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          Probabilistic Graphical Models Revision Notes
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/01/17/My-Life/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">My Life</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2018/01/23/Super-Machine-Learning-Revision-Notes/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

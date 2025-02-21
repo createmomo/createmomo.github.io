@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
+  <title>CRF Layer on the Top of BiLSTM - 1 | CreateMoMo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="OutlineThe article series will include:  Introduction - the general idea of the CRF layer on the top of BiLSTM for named entity recognition tasks A Detailed Example -  a toy example to explain how CRF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CRF Layer on the Top of BiLSTM - 1">
+<meta property="og:url" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/index.html">
+<meta property="og:site_name" content="CreateMoMo">
+<meta property="og:description" content="OutlineThe article series will include:  Introduction - the general idea of the CRF layer on the top of BiLSTM for named entity recognition tasks A Detailed Example -  a toy example to explain how CRF">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-1-v2.png">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-2-v2.png">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-3.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-4.jpg">
+<meta property="og:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/qr_code.jpg">
+<meta property="og:updated_time" content="2020-04-03T22:41:58.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CRF Layer on the Top of BiLSTM - 1">
+<meta name="twitter:description" content="OutlineThe article series will include:  Introduction - the general idea of the CRF layer on the top of BiLSTM for named entity recognition tasks A Detailed Example -  a toy example to explain how CRF">
+<meta name="twitter:image" content="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-1-v2.png">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
+
+</head>
+
+<body>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">CreateMoMo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://createmomo.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-CRF_Layer_on_the_Top_of_BiLSTM_1" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/" class="article-date">
+  <time datetime="2017-09-12T14:17:20.000Z" itemprop="datePublished">2017-09-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      CRF Layer on the Top of BiLSTM - 1
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="Outline"><a href="#Outline" class="headerlink" title="Outline"></a>Outline</h2><p>The article series will include:</p>
+<ul>
+<li><strong>Introduction</strong> - the general idea of the CRF layer on the top of BiLSTM for named entity recognition tasks</li>
+<li><strong>A Detailed Example</strong> -  a toy example to explain how CRF layer works step-by-step</li>
+<li><strong>Chainer Implementation</strong> - a chainer implementation of the CRF Layer</li>
+</ul>
+<blockquote>
+<p><strong>Who could be the readers of this article series?</strong><br>This article series is for students or someone else who is the beginner of natural language processing or any other AI related areas, I hope you can find what you do want to know from my articles. Moreover, please be free to provide any comments or suggestions to improve the series.</p>
+</blockquote>
+<h2 id="Prior-Knowledge"><a href="#Prior-Knowledge" class="headerlink" title="Prior Knowledge"></a>Prior Knowledge</h2><p>The <strong>only thing</strong> you need to know is what is Named Entity Recognition. If you do not know neural networks, CRF or any other related knowledge, please <strong>DO NOT</strong> worry about that. I will explain everything as intuitive as possible.</p>
+<h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>For a named entity recognition task, neural network based methods are very popular and common. For example, this <a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">paper[1]</a> proposed a BiLSTM-CRF named entity recognition model which used word and character embeddings. I will take the model in this paper for an example to explain how CRF Layer works.</p>
+<p>If you do not know the details of BiLSTM and CRF, just remember they are two different layers in a named entity recognition model.<br><a id="more"></a></p>
+<h3 id="1-1-Before-we-start"><a href="#1-1-Before-we-start" class="headerlink" title="1.1 Before we start"></a>1.1 Before we start</h3><p>we assume that, we have a dataset in which we have two entity types, <strong>Person</strong> and <strong>Organization</strong>. Therefore, in fact, in our dataset, we have 5 entity labels:</p>
+<ul>
+<li>B-Person</li>
+<li>I- Person</li>
+<li>B-Organization</li>
+<li>I-Organization</li>
+<li>O</li>
+</ul>
+<p>Furthermore, $ x $ is a sentence which includes 5 words, $w_0$,$w_1$,$w_2$,$w_3$,$w_4$. What is more, in sentence $x$, [$w_0$,$w_1$] is a Person entity, [$w_3$] is an Organization entity and others are “O”.</p>
+<h3 id="1-2-BiLSTM-CRF-model"><a href="#1-2-BiLSTM-CRF-model" class="headerlink" title="1.2 BiLSTM-CRF model"></a>1.2 BiLSTM-CRF model</h3><p>I will give a brief introduction of this model.</p>
+<p>As shown in the picture below:</p>
+<ul>
+<li><strong>Firstly</strong>, every word in sentence $x$ is represented as a vector which includes the word’s character embedding and word embedding. The character embedding is initialized randomly. The word embedding usually is from a pre-trained word embedding file. All the embeddings will be fine-tuned during the training process.</li>
+<li><strong>Second</strong>, the inputs of BiLSTM-CRF model are those embeddings and the outputs are predicted labels for words in sentence $x$.</li>
+</ul>
+<p><img src="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-1-v2.png" alt="Figure 1.1: BiLSTM-CRF model"></p>
+<p>Although, it is not necessary to know the details of BiLSTM layer, in order to understand the CRF layer more easily, we have to know what is the meaning of the output of BiLSTM Layer.</p>
+<p><img src="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-2-v2.png" alt="Figure 1.2: The meaning of outputs of BiLSTM layer"></p>
+<p>The picture above illustrates that the outputs of BiLSTM layer are the scores of each label. For example, for $w_0$，the outputs of BiLSTM node are 1.5 (B-Person), 0.9 (I-Person), 0.1 (B-Organization), 0.08 (I-Organization) and 0.05 (O). These scores will be the inputs of the CRF layer.</p>
+<p>Then, all the scores predicted by the BiLSTM blocks are fed into the CRF layer. In the CRF layer, the label sequence which has the highest prediction score would be selected as the best answer.</p>
+<h3 id="1-3-What-if-we-DO-NOT-have-the-CRF-layer"><a href="#1-3-What-if-we-DO-NOT-have-the-CRF-layer" class="headerlink" title="1.3 What if we DO NOT have the CRF layer"></a>1.3 What if we DO NOT have the CRF layer</h3><p>You may have found that, even without the CRF Layer, in other words, we can train a BiLSTM named entity recognition model as shown in the following picture.<br><img src="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-3.jpg" alt="Figure 1.3: The BiLSTM model with out CRF layer output correct labels"><br>Because the outputs of BiLSTM of each word are the label scores. We can select the label which has the highest score for each word.</p>
+<p>For instance, for $w_0$, “B-Person”, has the highest score (1.5), therefore we can select “B-Person” as its best predicted label. In the same way, we can choose “I-Person” for $w_1$, “O” for $w_2$, “B-Organization” for $w_3$ and “O” for $w_4$.</p>
+<p>Although we can get correct labels for sentence $x$ in this example, but it is not always like that. Try again for the following example in the picture below.<br><img src="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/CRF-LAYER-4.jpg" alt="Figure 1.4: The BiLSTM model with out CRF layer output some invalid label sequences"><br>Obviously, the outputs are invalid this time, “I-Organization I-Person” and “B-Organization I-Person”.</p>
+<h3 id="1-4-CRF-layer-can-learn-constrains-from-training-data"><a href="#1-4-CRF-layer-can-learn-constrains-from-training-data" class="headerlink" title="1.4 CRF layer can learn constrains from training data"></a>1.4 CRF layer can learn constrains from training data</h3><p>The CRF layer could add some constrains to the final predicted labels to ensure they are valid. These constrains can be learned by the CRF layer automatically from the training dataset during the training process.</p>
+<p>The constrains could be:</p>
+<ul>
+<li>The label of the first word in a sentence should start with “B-“ or “O”, not “I-“</li>
+<li>“B-label1 I-label2 I-label3 I-…”, in this pattern, label1, label2, label3 … should be the same named entity label. For example, “B-Person I-Person” is valid, but “B-Person I-Organization” is invalid.</li>
+<li>“O I-label” is invalid. The first label of one named entity should start with “B-“ not “I-“, in other words, the valid pattern should be “O B-label”</li>
+<li>…</li>
+</ul>
+<p>With these useful constrains, the number of invalid predicted label sequences will decrease dramatically.</p>
+<h3 id="Next"><a href="#Next" class="headerlink" title="Next"></a>Next</h3><p>In the next section, I will analyze the CRF loss function to explain how or why the CRF layer can learn those constrains mentioned above from training dataset.</p>
+<p>Looking forward to seeing you soon!</p>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><p>[1]  Lample, G., Ballesteros, M., Subramanian, S., Kawakami, K. and Dyer, C., 2016. Neural architectures for named entity recognition. arXiv preprint arXiv:1603.01360.<br><a href="https://arxiv.org/abs/1603.01360" target="_blank" rel="external">https://arxiv.org/abs/1603.01360</a></p>
+<h2 id="Note"><a href="#Note" class="headerlink" title="Note"></a>Note</h2><p>Please note that: The <strong>Wechat Public Account</strong> is available now! If you found this article is useful and would like to found more information about this series, please be free to subscribe the public account by your Wechat! (2020-04-03)<br><img src="/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/qr_code.jpg" alt="QR Code"></p>
+<blockquote>
+<p>When you reprint or distribute this article, please include the original link address.</p>
+</blockquote>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/" data-id="cm7elzvmo0008mgtj1h48lroc" class="article-share-link">Share</a>
+      
+        <a href="http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/#disqus_thread" class="article-comment-link">Comments</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2017/09/23/CRF_Layer_on_the_Top_of_BiLSTM_2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          CRF Layer on the Top of BiLSTM - 2
+        
+      </div>
+    </a>
+  
+  
+</nav>
+
+  
+</article>
+
+
+<section id="comments">
+  <div id="disqus_thread">
+    <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+  </div>
+</section>
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2025/02/">February 2025</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/04/">April 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/11/">November 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/11/">November 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/10/">October 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2025/02/20/Table-of-Contents/">Table of Contents</a>
+          </li>
+        
+          <li>
+            <a href="/2021/04/05/Fantastic-Trees/">Fantastic Trees</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/06/Main-Points-of-Interesting-Papers/">Main Points of Interesting Papers</a>
+          </li>
+        
+          <li>
+            <a href="/2019/11/01/Improving-Your-English-Communication-Skills/">Improving Your English Communication Skills</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/07/Probabilistic-Graphical-Models-Revision-Notes/">Probabilistic Graphical Models Revision Notes</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2025 CreateMoMo<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+<script>
+  var disqus_shortname = 'createmomo';
+  
+  var disqus_url = 'http://createmomo.github.io/2017/09/12/CRF_Layer_on_the_Top_of_BiLSTM_1/';
+  
+  (function(){
+    var dsq = document.createElement('script');
+    dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+  })();
+</script>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ["$","$"], ["\\(","\\)"] ],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'],
+            processEscapes: true
+        }
+    });
+    MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax();
+        for (var i = 0; i < all.length; ++i)
+            all[i].SourceElement().parentNode.className += ' has-jax';
+    });
+</script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-MML-AM_CHTML"></script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
